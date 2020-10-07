@@ -122,8 +122,8 @@ public class GameBoard {
         board[5][1] = new Wall(5,1);
         board[5][3] = new Wall(5,3);
         board[3][2] = new Wall(3,2);
-        board[10][10] = new Bribe(10,10);
-        board[10][11] = new Bribe(10,11);
+        board[5][5] = new Bribe(5,5);
+        board[6][6] = new Bribe(6,6);
 
     }
 }

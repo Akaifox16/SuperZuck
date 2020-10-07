@@ -9,8 +9,8 @@ import CPE200.proj.succ.SuperZuckGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		DesktopMini2DxConfig config = new DesktopMini2DxConfig(SuperZuckGame.GAME_IDENTIFIER);
-		//config.height = 1080;
-		//config.width = 1920;
+		config.height = 768;
+		config.width = 1366;
 		//config.resizable = false;
 //		config.fullscreen = true;
 		new DesktopMini2DxGame(new SuperZuckGame(), config);

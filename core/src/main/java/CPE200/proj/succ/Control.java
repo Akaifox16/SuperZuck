@@ -7,13 +7,13 @@ import CPE200.proj.succ.model.board.GameBoard;
 
 
 public class Control {
-    private GameState currentState = GameState.Stage; // stage ปัจจุบันของตัวเกม
+    private GameState currentState = GameState.MainMenu; // stage ปัจจุบันของตัวเกม
     private GameBoard gameBoard;
     private TurnState currentTurn = TurnState.Player_Move;
 
 
     public Control(){
-        gameBoard = new GameBoard(15,20);
+        gameBoard = new GameBoard(12,18);
         gameBoard.Stage1();
     }
 
@@ -24,6 +24,7 @@ public class Control {
     public GameState getCurrentState() {
         return currentState;
     }
+    public void setCurrentState(GameState currentState) { this.currentState = currentState; }
 
     public void moveRight(){
         GameObject rightTile = gameBoard.board(gameBoard.getThumnazX(), gameBoard.getThumnazY()+1);
