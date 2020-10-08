@@ -2,7 +2,7 @@ package CPE200.proj.succ.model.board;
 
 import CPE200.proj.succ.model.GameObject;
 import CPE200.proj.succ.model.GameObjectType;
-import CPE200.proj.succ.model.Wall;
+import CPE200.proj.succ.model.staticObject.Wall;
 import CPE200.proj.succ.model.movable.Bribe;
 import CPE200.proj.succ.model.movable.ThumnaZ;
 
@@ -44,8 +44,8 @@ public class GameBoard {
     public int getThumnazY() {
         return thumnazY;
     }
-    public GameObject getThumnaz(){
-        return board(thumnazX,thumnazY);
+    public ThumnaZ getThumnaz(){
+        return (ThumnaZ) board(thumnazX,thumnazY);
     }
     public GameObject leftObject(GameObject temp){return board(temp.row(), temp.column()-1);}
     public GameObject rightObject(GameObject temp){return board(temp.row(),temp.column()+1);}

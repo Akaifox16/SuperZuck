@@ -1,5 +1,7 @@
-package CPE200.proj.succ.model;
+package CPE200.proj.succ.model.staticObject;
 
+import CPE200.proj.succ.model.GameObject;
+import CPE200.proj.succ.model.GameObjectType;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Wall extends GameObject {

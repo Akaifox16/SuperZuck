@@ -1,7 +1,7 @@
 package CPE200.proj.succ;
 
 import CPE200.proj.succ.model.GameObject;
-import CPE200.proj.succ.model.TurnState;
+import CPE200.proj.succ.model.GameState;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import org.mini2Dx.core.game.BasicGame;
 import org.mini2Dx.core.graphics.Graphics;
+import org.mini2Dx.ui.element.Button;
+import org.mini2Dx.ui.element.TabButton;
 
 public class SuperZuckGame extends BasicGame {
 	public static final String GAME_IDENTIFIER = "CPE200.proj.succ";
@@ -29,21 +31,24 @@ public class SuperZuckGame extends BasicGame {
     
     @Override
     public void update(float delta) {
-	    if(game.getCurrentState() == GameState.Stage) {
-            if(game.getCurrentTurn() == TurnState.Player_Move) {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
-                    game.moveRight();
+	    switch (game.getCurrentState()) {
+            case Stage:
+                switch (game.getCurrentTurn()) {
+                    case Player_Move:
+                        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+                            game.moveRight();
+                        }
+                        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+                            game.moveLeft();
+                        }
+                        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+                            game.moveUp();
+                        }
+                        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+                            game.moveDown();
+                        }
+                        break;
                 }
-                if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
-                    game.moveLeft();
-                }
-                if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-                    game.moveUp();
-                }
-                if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-                    game.moveDown();
-                }
-            }
         }
     }
     
@@ -77,6 +82,10 @@ public class SuperZuckGame extends BasicGame {
                 GameObject current = game.gameBoard().board(x,y);
                 switch (current.getType()) {
                     case Thumnaz:
+                    case Key:
+                    case Door:
+                    case Flour:
+                    case Police:
                     case Wall:
                     case Bribe:
                         g.drawTexture(current.getTexture(),renderX,renderY);

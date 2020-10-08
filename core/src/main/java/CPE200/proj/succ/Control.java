@@ -2,6 +2,7 @@ package CPE200.proj.succ;
 
 import CPE200.proj.succ.model.GameObject;
 import CPE200.proj.succ.model.GameObjectType;
+import CPE200.proj.succ.model.GameState;
 import CPE200.proj.succ.model.TurnState;
 import CPE200.proj.succ.model.board.GameBoard;
 

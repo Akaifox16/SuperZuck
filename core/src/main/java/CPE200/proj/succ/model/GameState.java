@@ -1,4 +1,4 @@
-package CPE200.proj.succ;
+package CPE200.proj.succ.model;
 
 public enum GameState {
     MainMenu,
