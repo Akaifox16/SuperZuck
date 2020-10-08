@@ -59,7 +59,7 @@ public class SuperZuckGame extends BasicGame {
                 break;
             }
             case Stage: {
-                g.setBackgroundColor(Color.GREEN);
+                g.setBackgroundColor(Color.GRAY);
                 renderBoard(g);
                 break;
             }
