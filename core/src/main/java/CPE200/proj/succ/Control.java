@@ -37,6 +37,20 @@ public class Control {
                 this.currentPhase = TurnState.Player_Move;break;
         }
     }
+    public void nextStage(){
+        switch (currentState){
+            case Stage1:
+                this.currentState = GameState.Stage2;break;
+            case Stage2:
+                this.currentState = GameState.Stage3;break;
+            case Stage3:
+                this.currentState = GameState.Stage4;break;
+            case Stage4:
+                this.currentState = GameState.Stage5;break;
+            case Stage5:
+                this.currentState = GameState.Stage1;break;
+        }
+    }
 
     public void moveRight(){
         GameObject rightTile = gameBoard.board(gameBoard.getThumnazX(), gameBoard.getThumnazY()+1);

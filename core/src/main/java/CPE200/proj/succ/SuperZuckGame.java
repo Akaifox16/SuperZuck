@@ -30,7 +30,7 @@ public class SuperZuckGame extends BasicGame {
     @Override
     public void update(float delta) {
 	    switch (game.getCurrentState()) {
-            case Stage:
+            case Stage1: case Stage2:case Stage3:case Stage4:case Stage5:
                 switch (game.getCurrentPhase()) {
                     case Player_Move:
                         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
@@ -68,7 +68,7 @@ public class SuperZuckGame extends BasicGame {
                 renderMainmenu(g);
                 break;
             }
-            case Stage: {
+            case Stage1: case Stage2:case Stage3:case Stage4:case Stage5:{
                 g.setBackgroundColor(Color.GRAY);
                 renderBoard(g);
                 break;
@@ -111,7 +111,7 @@ public class SuperZuckGame extends BasicGame {
         g.drawTexture(Playbotton,width/2-80,height/2);
         g.drawTexture(name_Game,(width/3),height/7-100);
         if (Gdx.input.isTouched()){
-            game.setCurrentState(GameState.Stage);
+            game.setCurrentState(GameState.Stage1);
         }
     }
 
