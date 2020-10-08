@@ -44,8 +44,8 @@ public class GameBoard {
     public int getThumnazY() {
         return thumnazY;
     }
-    public ThumnaZ getThumnaz(){
-        return (ThumnaZ) board(thumnazX,thumnazY);
+    public GameObject getThumnaz(){
+        return  board(thumnazX,thumnazY);
     }
     public GameObject leftObject(GameObject temp){return board(temp.row(), temp.column()-1);}
     public GameObject rightObject(GameObject temp){return board(temp.row(),temp.column()+1);}
@@ -86,9 +86,9 @@ public class GameBoard {
     }
 
     public void Stage1(){
-        board[row-2][column-5] = new ThumnaZ(row-2,column-5);
-        thumnazX = row-2;
-        thumnazY = column-5;
+        board[3][4] = new ThumnaZ(3,4);
+        thumnazX = 3;
+        thumnazY = 4;
 
         for(int x = 0 ; x < row ; x++) {
             board[x][0] = new Wall(x,0);
@@ -100,29 +100,28 @@ public class GameBoard {
         }
 
         board[2][4] = new Wall(2,4);
-        board[3][4] = new Wall(3,4);
-        board[3][5] = new Wall(3,5);
-        board[3][6] = new Wall(3,6);
-        board[3][7] = new Wall(3,7);
-        board[4][4] = new Wall(4,4);
-        board[5][4] = new Wall(5,4);
-        board[1][4] = new Wall(1,4);
+        board[2][5] = new Wall(2,5);
         board[2][8] = new Wall(2,8);
-        board[2][7] = new Wall(2,7);
-        board[1][9] = new Wall(1,9);
-        board[1][8] = new Wall(1,8);
-        board[1][7] = new Wall(1,7);
-        board[3][1] = new Wall(3,1);
-        board[2][1] = new Wall(2,1);
         board[2][9] = new Wall(2,9);
-        board[2][4] = new Wall(2,4);
+        board[3][5] = new Wall(3,5);
+        board[3][8] = new Wall(3,8);
         board[4][1] = new Wall(4,1);
-        board[4][8] = new Wall(4,8);
-        board[4][7] = new Wall(4,7);
-        board[5][1] = new Wall(5,1);
-        board[5][3] = new Wall(5,3);
-        board[3][2] = new Wall(3,2);
-        board[5][5] = new Bribe(5,5);
+        board[4][2] = new Wall(4,2);
+        board[4][10] = new Wall(4,10);
+        board[5][9] = new Wall(5,9);
+        board[5][10] = new Wall(5,10);
+        board[7][7] = new Wall(7,7);
+        board[9][1] = new Wall(9,1);
+        board[9][2] = new Wall(9,2);
+        board[9][4] = new Wall(9,4);
+        board[9][5] = new Wall(9,5);
+        board[9][9] = new Wall(9,9);
+        board[10][8] = new Wall(10,8);
+        board[11][4] = new Wall(11,4);
+        board[11][1] = new Wall(11,1);
+        board[11][2] = new Wall(11,2);
+        board[11][3] = new Wall(11,3);
+        board[2][2] = new Bribe(2,2);
         board[6][6] = new Bribe(6,6);
 
     }

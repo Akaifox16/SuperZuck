@@ -8,9 +8,10 @@ import CPE200.proj.succ.model.board.GameBoard;
 
 
 public class Control {
+
+    private GameBoard gameBoard; // กระดานของตัวเกม
     private GameState currentState = GameState.MainMenu; // stage ปัจจุบันของตัวเกม
-    private GameBoard gameBoard;
-    private TurnState currentTurn = TurnState.Player_Move;
+    private TurnState currentPhase = TurnState.Player_Move;// turn phase ปัจจุบัน
 
 
     public Control(){
@@ -19,13 +20,23 @@ public class Control {
     }
 
     public GameBoard gameBoard() { return gameBoard; }
-    public TurnState getCurrentTurn() {
-        return currentTurn;
+    public TurnState getCurrentPhase() {
+        return currentPhase;
     }
     public GameState getCurrentState() {
         return currentState;
     }
     public void setCurrentState(GameState currentState) { this.currentState = currentState; }
+    public void nextPhase(){
+        switch (currentPhase){
+            case Player_Move:
+                this.currentPhase = TurnState.Police_Check;break;
+            case Police_Check:
+                this.currentPhase = TurnState.Bribe_CD;break;
+            case Bribe_CD:
+                this.currentPhase = TurnState.Player_Move;break;
+        }
+    }
 
     public void moveRight(){
         GameObject rightTile = gameBoard.board(gameBoard.getThumnazX(), gameBoard.getThumnazY()+1);

@@ -9,8 +9,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import org.mini2Dx.core.game.BasicGame;
 import org.mini2Dx.core.graphics.Graphics;
-import org.mini2Dx.ui.element.Button;
-import org.mini2Dx.ui.element.TabButton;
 
 public class SuperZuckGame extends BasicGame {
 	public static final String GAME_IDENTIFIER = "CPE200.proj.succ";
@@ -33,21 +31,28 @@ public class SuperZuckGame extends BasicGame {
     public void update(float delta) {
 	    switch (game.getCurrentState()) {
             case Stage:
-                switch (game.getCurrentTurn()) {
+                switch (game.getCurrentPhase()) {
                     case Player_Move:
                         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
                             game.moveRight();
+                            game.nextPhase();
                         }
                         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
                             game.moveLeft();
+                            game.nextPhase();
                         }
                         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
                             game.moveUp();
+                            game.nextPhase();
                         }
                         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
                             game.moveDown();
+                            game.nextPhase();
                         }
                         break;
+                    case Police_Check:
+                    case Bribe_CD:
+                        game.nextPhase();
                 }
         }
     }
