@@ -2,13 +2,16 @@ package CPE200.proj.succ;
 
 import CPE200.proj.succ.model.GameObject;
 import CPE200.proj.succ.model.GameState;
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import org.mini2Dx.core.game.BasicGame;
 import org.mini2Dx.core.graphics.Graphics;
-
+import org.mini2Dx.core.graphics.Sprite;
+import org.mini2Dx.ui.element.Button;
+import org.mini2Dx.ui.element.TabButton;
 
 public class SuperZuckGame extends BasicGame {
 	public static final String GAME_IDENTIFIER = "CPE200.proj.succ";
@@ -17,6 +20,9 @@ public class SuperZuckGame extends BasicGame {
     private int boardOffsetX, boardOffsetY;
 	private Texture BackGround;
 	private Sound sound;
+	private boolean soundcheck = true;
+	private Sprite sound_sprite_button;
+	private Sprite play_sprite_button;
 
 	@Override
     public void initialise() {
@@ -26,11 +32,17 @@ public class SuperZuckGame extends BasicGame {
         game = new Control();
         sound = Gdx.audio.newSound(Gdx.files.internal("song.mp3"));
         sound.play(0.5f);
+        //------------------------------Sprite-----------------------------------------------------
+        play_sprite_button = new Sprite(new Texture("play_button.png"));
+        play_sprite_button.setPosition(width/2-80,height/2);
+        //------------------------------Sprite_sound------------------------------------------------
+        sound_sprite_button = new Sprite(new Texture("sound_up.png"));
+        sound_sprite_button.setPosition(width-150,height/6);
     }
     
     @Override
     public void update(float delta) {
-	    switch (game.getCurrentState()) {
+        switch (game.getCurrentState()) {
             case Stage1: case Stage2:case Stage3:case Stage4:case Stage5:
                 switch (game.getCurrentPhase()) {
                     case Player_Move:
@@ -68,11 +80,13 @@ public class SuperZuckGame extends BasicGame {
         switch (game.getCurrentState()) {
             case MainMenu:{
                 renderMainmenu(g);
+                renderMusic(g);
                 break;
             }
-            case Stage1: case Stage2:case Stage3:case Stage4:case Stage5:{
+            case Stage1: {
                 g.setBackgroundColor(Color.GRAY);
                 renderBoard(g);
+                renderMusic(g);
                 break;
             }
         }
@@ -105,15 +119,37 @@ public class SuperZuckGame extends BasicGame {
         }
     }
 
-    public void renderMainmenu (Graphics g){
-        BackGround = new Texture("bg.jpg");
-        Texture Playbotton = new Texture("play_button.png");
-        Texture name_Game =  new Texture("Full_Flour_Alchemist.png");
-        g.drawTexture(BackGround,0,0);
-        g.drawTexture(Playbotton,width/2-80,height/2);
-        g.drawTexture(name_Game,(width/3),height/7-100);
-        if (Gdx.input.isTouched()){
-            game.setCurrentState(GameState.Stage1);
+
+    public void renderMainmenu (Graphics g) {
+        g.drawTexture(new Texture("bg.jpg"), 0, 0);
+        g.drawTexture(new Texture("Full_Flour_Alchemist.png"), (width / 3), height / 7 - 100);
+        g.drawSprite(play_sprite_button);
+        if (Gdx.input.isTouched()) {
+            if (Gdx.input.getX() > play_sprite_button.getX() && Gdx.input.getX() < play_sprite_button.getX() + play_sprite_button.getWidth()) {
+                if (Gdx.input.getY() > play_sprite_button.getY() && Gdx.input.getY() < play_sprite_button.getY() + play_sprite_button.getHeight()) {
+                    game.setCurrentState(GameState.Stage1);
+                }
+            }
+        }
+    }
+
+    public void renderMusic(Graphics g){
+	    g.drawSprite(sound_sprite_button);
+        if (Gdx.input.isTouched()) {
+            if (Gdx.input.getX() > sound_sprite_button.getX() && Gdx.input.getX() < sound_sprite_button.getX() + sound_sprite_button.getWidth()) {
+                if (Gdx.input.getY() > sound_sprite_button.getY() && Gdx.input.getY() < sound_sprite_button.getY() + sound_sprite_button.getHeight() && soundcheck) {
+                    sound.pause();
+                    soundcheck = false;
+                    sound_sprite_button.setTexture(new Texture("mute.png"));
+                    g.drawSprite(sound_sprite_button);
+
+                }else {
+                    soundcheck = true;
+                    sound_sprite_button.setTexture(new Texture("sound_up.png"));
+                    g.drawSprite(sound_sprite_button);
+                    sound.play();
+                }
+            }
         }
     }
 
