@@ -20,7 +20,7 @@ public class SuperZuckGame extends BasicGame {
     private int boardOffsetX, boardOffsetY;
 	private Texture BackGround;
 	private Sound sound;
-	private boolean soundcheck = true;
+	private boolean soundcheck = false;
 	private Sprite sound_sprite_button;
 	private Sprite play_sprite_button;
 
@@ -137,20 +137,25 @@ public class SuperZuckGame extends BasicGame {
 	    g.drawSprite(sound_sprite_button);
         if (Gdx.input.isTouched()) {
             if (Gdx.input.getX() > sound_sprite_button.getX() && Gdx.input.getX() < sound_sprite_button.getX() + sound_sprite_button.getWidth()) {
-                if (Gdx.input.getY() > sound_sprite_button.getY() && Gdx.input.getY() < sound_sprite_button.getY() + sound_sprite_button.getHeight() && soundcheck) {
-                    sound.pause();
-                    soundcheck = false;
-                    sound_sprite_button.setTexture(new Texture("mute.png"));
-                    g.drawSprite(sound_sprite_button);
-
-                }else {
-                    soundcheck = true;
-                    sound_sprite_button.setTexture(new Texture("sound_up.png"));
-                    g.drawSprite(sound_sprite_button);
-                    sound.play();
+                if (Gdx.input.getY() > sound_sprite_button.getY() && Gdx.input.getY() < sound_sprite_button.getY() + sound_sprite_button.getHeight()) {
+                    if (soundcheck){
+                        sound.pause();
+                        soundcheck = false;
+                        sound_sprite_button.setTexture(new Texture("mute.png"));
+                        g.drawSprite(sound_sprite_button);}
+                    else {
+                        soundcheck = true;
+                        sound_sprite_button.setTexture(new Texture("sound_up.png"));
+                        g.drawSprite(sound_sprite_button);
+                        sound.play(0.5f);
+                    }
                 }
             }
         }
+    }
+
+    public void renderEndscreen(Graphics g){
+
     }
 
 }
