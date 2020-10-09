@@ -2,13 +2,13 @@ package CPE200.proj.succ;
 
 import CPE200.proj.succ.model.GameObject;
 import CPE200.proj.succ.model.GameState;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import org.mini2Dx.core.game.BasicGame;
 import org.mini2Dx.core.graphics.Graphics;
+
 
 public class SuperZuckGame extends BasicGame {
 	public static final String GAME_IDENTIFIER = "CPE200.proj.succ";
@@ -17,6 +17,7 @@ public class SuperZuckGame extends BasicGame {
     private int boardOffsetX, boardOffsetY;
 	private Texture BackGround;
 	private Sound sound;
+
 	@Override
     public void initialise() {
         gridSize = 50;
@@ -51,6 +52,7 @@ public class SuperZuckGame extends BasicGame {
                         }
                         break;
                     case Police_Check:
+                        game.gameBoard().checkPolice(game);
                     case Bribe_CD:
                         game.nextPhase();
                 }

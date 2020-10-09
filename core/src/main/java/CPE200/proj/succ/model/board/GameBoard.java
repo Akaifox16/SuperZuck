@@ -1,14 +1,22 @@
 package CPE200.proj.succ.model.board;
 
+import CPE200.proj.succ.Control;
 import CPE200.proj.succ.model.GameObject;
 import CPE200.proj.succ.model.GameObjectType;
+import CPE200.proj.succ.model.GameState;
+import CPE200.proj.succ.model.staticObject.Police;
 import CPE200.proj.succ.model.staticObject.Wall;
 import CPE200.proj.succ.model.movable.Bribe;
 import CPE200.proj.succ.model.movable.ThumnaZ;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class GameBoard {
     private final GameObject[][] board;
     private int thumnazX , thumnazY; // index ของ main character
+    private List<Police> polices;
     private final int row;
     private final int column;
 
@@ -72,6 +80,68 @@ public class GameBoard {
             return lowerObject(lower).getType() == GameObjectType.NULL;
         return false;
     }
+    public void addPolice(int i , int j){
+        Police police = new Police(i, j);
+        board[i][j] = police;
+        polices.add(police);
+    }
+
+    public void checkPolice(Control game){
+        for (Police police:polices) {
+            GameObject left = leftObject(police);
+            GameObject right = rightObject(police);
+            GameObject upper = upperObject(police);
+            GameObject lower = lowerObject(police);
+            switch (police.getState()) {
+                case Suspect:
+                    switch (left.getType()) {
+                        case Bribe:
+                            toNull(left);
+                            police.bribed();break;
+                        case Thumnaz:
+                            game.setCurrentState(GameState.GameOver);
+                    }
+                    switch (right.getType()) {
+                        case Bribe:
+                            toNull(right);
+                            police.bribed();break;
+                        case Thumnaz:
+                            game.setCurrentState(GameState.GameOver);
+                    }
+                    switch (upper.getType()) {
+                        case Bribe:
+                            toNull(upper);
+                            police.bribed();break;
+                        case Thumnaz:
+                            game.setCurrentState(GameState.GameOver);
+                    }
+                    switch (lower.getType()) {
+                        case Bribe:
+                            toNull(lower);
+                            police.bribed();break;
+                        case Thumnaz:
+                            game.setCurrentState(GameState.GameOver);
+                    }
+                case Sleep:
+                    switch (left.getType()){
+                        case Thumnaz:
+                            police.suspect();
+                    }
+                    switch (right.getType()){
+                        case Thumnaz:
+                            police.suspect();
+                    }
+                    switch (upper.getType()){
+                        case Thumnaz:
+                            police.suspect();
+                    }
+                    switch (lower.getType()){
+                        case Thumnaz:
+                            police.suspect();
+                    }
+            }
+        }
+    }
 
     public GameBoard(int i , int j){
         board = new GameObject[i][j];
@@ -80,9 +150,10 @@ public class GameBoard {
                 board[x][y] = new GameObject(x,y);
             }
         }
-
         this.row = i;
         this.column = j;
+
+        polices = new ArrayList<Police>();
     }
 
     public void Stage1(){
@@ -123,6 +194,6 @@ public class GameBoard {
         board[11][3] = new Wall(11,3);
         board[2][2] = new Bribe(2,2);
         board[6][6] = new Bribe(6,6);
-
+        addPolice(10,15);
     }
 }

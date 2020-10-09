@@ -9,4 +9,5 @@ public class Bribe extends MovableObject {
         super.texture = new Texture("bribe.png");
         super.type = GameObjectType.Bribe;
     }
+
 }

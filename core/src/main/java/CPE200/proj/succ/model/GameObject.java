@@ -10,6 +10,7 @@ public class GameObject {
     public boolean movable(){ return false;}
     public boolean pickable(){return false;}
 
+
     public GameObject(int i , int j){
         row = i;
         column = j;

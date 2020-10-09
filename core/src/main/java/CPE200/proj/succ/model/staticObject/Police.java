@@ -4,17 +4,25 @@ import CPE200.proj.succ.model.GameObject;
 import CPE200.proj.succ.model.GameObjectType;
 import com.badlogic.gdx.graphics.Texture;
 
-enum PoliceState {
-    Sleep,
-    Suspect
-}
+
 
 public class Police extends GameObject {
     private PoliceState state;
-    //private boolean bribed;
     private int bribeCoolDown;
 
+    public void bribed(){
+        setBribeCoolDown(20);
+        state = PoliceState.Sleep;
+    }
 
+    public void setBribeCoolDown(int bribeCoolDown) {
+        this.bribeCoolDown = bribeCoolDown;
+    }
+    public void suspect(){this.state = PoliceState.Suspect;}
+
+    public PoliceState getState() {
+        return state;
+    }
 
     public Police(int i, int j) {
         super(i, j);
