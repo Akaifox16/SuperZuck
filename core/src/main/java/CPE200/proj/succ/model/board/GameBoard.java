@@ -123,21 +123,25 @@ public class GameBoard {
                             game.setCurrentState(GameState.GameOver);
                     }
                 case Sleep:
-                    switch (left.getType()){
-                        case Thumnaz:
-                            police.suspect();
-                    }
-                    switch (right.getType()){
-                        case Thumnaz:
-                            police.suspect();
-                    }
-                    switch (upper.getType()){
-                        case Thumnaz:
-                            police.suspect();
-                    }
-                    switch (lower.getType()){
-                        case Thumnaz:
-                            police.suspect();
+                    if(police.getBribeCoolDown() > 0)
+                        police.setBribeCoolDown(police.getBribeCoolDown() - 1);
+                    else {
+                        switch (left.getType()) {
+                            case Thumnaz:
+                                police.suspect();
+                        }
+                        switch (right.getType()) {
+                            case Thumnaz:
+                                police.suspect();
+                        }
+                        switch (upper.getType()) {
+                            case Thumnaz:
+                                police.suspect();
+                        }
+                        switch (lower.getType()) {
+                            case Thumnaz:
+                                police.suspect();
+                        }
                     }
             }
         }

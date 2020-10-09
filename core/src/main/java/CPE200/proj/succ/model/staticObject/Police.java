@@ -23,6 +23,9 @@ public class Police extends GameObject {
     public PoliceState getState() {
         return state;
     }
+    public int getBribeCoolDown() {
+        return bribeCoolDown;
+    }
 
     public Police(int i, int j) {
         super(i, j);
