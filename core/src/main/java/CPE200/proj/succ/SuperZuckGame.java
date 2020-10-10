@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import org.mini2Dx.core.game.BasicGame;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.Sprite;
-import org.mini2Dx.ui.element.Button;
-import org.mini2Dx.ui.element.TabButton;
 
 public class SuperZuckGame extends BasicGame {
 	public static final String GAME_IDENTIFIER = "CPE200.proj.succ";
@@ -37,7 +35,7 @@ public class SuperZuckGame extends BasicGame {
         play_sprite_button.setPosition(width/2-80,height/2);
         //------------------------------Sprite_sound------------------------------------------------
         sound_sprite_button = new Sprite(new Texture("sound_up.png"));
-        sound_sprite_button.setPosition(width-150,height/6);
+        sound_sprite_button.setPosition(width-180,height/8);
     }
     
     @Override
@@ -138,17 +136,17 @@ public class SuperZuckGame extends BasicGame {
         if (Gdx.input.isTouched()) {
             if (Gdx.input.getX() > sound_sprite_button.getX() && Gdx.input.getX() < sound_sprite_button.getX() + sound_sprite_button.getWidth()) {
                 if (Gdx.input.getY() > sound_sprite_button.getY() && Gdx.input.getY() < sound_sprite_button.getY() + sound_sprite_button.getHeight()) {
-                    if (soundcheck){
-                        sound.pause();
+                    if (soundcheck ){
                         soundcheck = false;
-                        sound_sprite_button.setTexture(new Texture("mute.png"));
-                        g.drawSprite(sound_sprite_button);}
+                        sound.pause();
+                        sound_sprite_button.setTexture(new Texture("sound_down.png"));
+                    }
                     else {
+                        sound.play(0.5f);
                         soundcheck = true;
                         sound_sprite_button.setTexture(new Texture("sound_up.png"));
-                        g.drawSprite(sound_sprite_button);
-                        sound.play(0.5f);
                     }
+                    g.drawSprite(sound_sprite_button);
                 }
             }
         }
