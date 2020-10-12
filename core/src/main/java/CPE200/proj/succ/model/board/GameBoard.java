@@ -17,7 +17,7 @@ import java.util.List;
 
 public class GameBoard {
     private final GameObject[][] board;
-    private List<ItemObject> inventory;
+    private List<GameObject> inventory;
     private int thumnazX , thumnazY; // index ของ main character
     private List<Police> polices;
     private final int row;
@@ -58,28 +58,31 @@ public class GameBoard {
     public GameObject getThumnaz(){
         return  board(thumnazX,thumnazY);
     }
+    public List<GameObject> getInventory() {
+        return inventory;
+    }
     public GameObject leftObject(GameObject temp){return board(temp.row(), temp.column()-1);}
     public GameObject rightObject(GameObject temp){return board(temp.row(),temp.column()+1);}
     public GameObject upperObject(GameObject temp){return board(temp.row()-1,temp.column());}
     public GameObject lowerObject(GameObject temp){return board(temp.row()+1,temp.column());}
     public boolean canLeft(GameObject left){
-        if(left.movable())
+        if(left.movable() || left.pickable())
             return leftObject(left).getType() == GameObjectType.NULL;
         return false;
     }
     public boolean canRight(GameObject right){
-        if(right.movable()){
+        if(right.movable() || right.pickable()){
             return rightObject(right).getType() == GameObjectType.NULL;
         }
         return false;
     }
     public boolean canUp(GameObject upper){
-        if(upper.movable())
+        if(upper.movable() || upper.pickable())
             return upperObject(upper).getType() == GameObjectType.NULL;
         return false;
     }
     public boolean canDown(GameObject lower){
-        if(lower.movable())
+        if(lower.movable() || lower.pickable())
             return lowerObject(lower).getType() == GameObjectType.NULL;
         return false;
     }
@@ -159,7 +162,7 @@ public class GameBoard {
         }
         this.row = i;
         this.column = j;
-        inventory = new ArrayList<ItemObject>();
+        inventory = new ArrayList<GameObject>();
         polices = new ArrayList<Police>();
     }
 

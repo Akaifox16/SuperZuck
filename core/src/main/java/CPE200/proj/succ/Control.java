@@ -5,6 +5,7 @@ import CPE200.proj.succ.model.GameObjectType;
 import CPE200.proj.succ.model.GameState;
 import CPE200.proj.succ.model.TurnState;
 import CPE200.proj.succ.model.board.GameBoard;
+import CPE200.proj.succ.model.item.ItemObject;
 
 
 public class Control {
@@ -57,9 +58,13 @@ public class Control {
                 gameBoard.toBribe(nextObj);
                 gameBoard.toThumnaZ(obj);
                 gameBoard.toNull(gameBoard.getThumnaz());
+                break;
             case Flour:
             case Key:
-
+                gameBoard.getInventory().add(obj);
+                gameBoard.toThumnaZ(obj);
+                gameBoard.toNull(gameBoard.getThumnaz());
+                break;
         }
     }
 
