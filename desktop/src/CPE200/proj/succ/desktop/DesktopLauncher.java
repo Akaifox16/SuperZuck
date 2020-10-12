@@ -11,8 +11,8 @@ public class DesktopLauncher {
 		DesktopMini2DxConfig config = new DesktopMini2DxConfig(SuperZuckGame.GAME_IDENTIFIER);
 		config.height = 768;
 		config.width = 1366;
-		//config.resizable = false;
-//		config.fullscreen = true;
+		config.resizable = false;
+		//config.fullscreen = true;
 		new DesktopMini2DxGame(new SuperZuckGame(), config);
 	}
 }

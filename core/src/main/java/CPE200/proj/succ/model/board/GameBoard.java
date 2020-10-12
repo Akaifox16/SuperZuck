@@ -7,6 +7,7 @@ import CPE200.proj.succ.model.GameState;
 import CPE200.proj.succ.model.item.Flour;
 import CPE200.proj.succ.model.item.ItemObject;
 import CPE200.proj.succ.model.item.Key;
+import CPE200.proj.succ.model.staticObject.Door;
 import CPE200.proj.succ.model.staticObject.Police;
 import CPE200.proj.succ.model.staticObject.Wall;
 import CPE200.proj.succ.model.movable.Bribe;
@@ -68,23 +69,23 @@ public class GameBoard {
     public GameObject lowerObject(GameObject temp){return board(temp.row()+1,temp.column());}
     public boolean canLeft(GameObject left){
         if(left.movable() || left.pickable())
-            return leftObject(left).getType() == GameObjectType.NULL;
+            return leftObject(left).getType() == GameObjectType.NULL || leftObject(left).pickable();
         return false;
     }
     public boolean canRight(GameObject right){
         if(right.movable() || right.pickable()){
-            return rightObject(right).getType() == GameObjectType.NULL;
+            return rightObject(right).getType() == GameObjectType.NULL || rightObject(right).pickable();
         }
         return false;
     }
     public boolean canUp(GameObject upper){
         if(upper.movable() || upper.pickable())
-            return upperObject(upper).getType() == GameObjectType.NULL;
+            return upperObject(upper).getType() == GameObjectType.NULL || upperObject(upper).pickable();
         return false;
     }
     public boolean canDown(GameObject lower){
         if(lower.movable() || lower.pickable())
-            return lowerObject(lower).getType() == GameObjectType.NULL;
+            return lowerObject(lower).getType() == GameObjectType.NULL || lowerObject(lower).pickable();
         return false;
     }
     public void addPolice(int i , int j){
@@ -209,6 +210,7 @@ public class GameBoard {
         board[2][2] = new Bribe(2,2);
         board[6][6] = new Bribe(6,6);
 
+        board[10][3] = Door.StageDoor(10,3);
         addPolice(10,15);
     }
 }

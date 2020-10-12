@@ -39,7 +39,14 @@ public class Control {
         }
     }
 
-    public void restartstate(){ }
+    public void restartstate(){
+        switch (currentState){
+            case Stage1:
+                gameBoard = new GameBoard(12,18);
+                gameBoard.Stage1();
+                break;
+        }
+    }
 
     public void nextStage(){
         switch (currentState){

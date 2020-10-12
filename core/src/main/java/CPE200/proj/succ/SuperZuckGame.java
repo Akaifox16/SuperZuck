@@ -85,6 +85,7 @@ public class SuperZuckGame extends BasicGame {
                 g.setBackgroundColor(Color.GRAY);
                 renderBoard(g);
                 renderMusic(g);
+                renderRestartstate(g);
                 break;
             }
             case GameOver:
@@ -105,6 +106,7 @@ public class SuperZuckGame extends BasicGame {
                 switch (current.getType()) {
                     case Thumnaz:
                     case Key:
+                    case StageDoor:
                     case Door:
                     case Flour:
                     case Police:
