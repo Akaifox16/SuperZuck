@@ -34,8 +34,8 @@ public class SuperZuckGame extends BasicGame {
         play_sprite_button = new Sprite(new Texture("play_button.png"));
         play_sprite_button.setPosition(width/2-80,height/2);
         //------------------------------Sprite_sound------------------------------------------------
-        sound_sprite_button = new Sprite(new Texture("sound_up.png"));
-        sound_sprite_button.setPosition(width-180,height/8);
+        sound_sprite_button = new Sprite(new Texture("sound_up_edit.jpg"));
+        sound_sprite_button.setPosition(width-180,height-100);
     }
     
     @Override
@@ -83,6 +83,9 @@ public class SuperZuckGame extends BasicGame {
                 renderMusic(g);
                 break;
             }
+            case GameOver:
+                renderEndscreen(g);
+                break;
         }
     }
 
@@ -129,18 +132,18 @@ public class SuperZuckGame extends BasicGame {
 
     public void renderMusic(Graphics g){
 	    g.drawSprite(sound_sprite_button);
-        if (Gdx.input.isTouched()) {
+        if (Gdx.input.justTouched()) {
             if (Gdx.input.getX() > sound_sprite_button.getX() && Gdx.input.getX() < sound_sprite_button.getX() + sound_sprite_button.getWidth()) {
                 if (Gdx.input.getY() > sound_sprite_button.getY() && Gdx.input.getY() < sound_sprite_button.getY() + sound_sprite_button.getHeight()) {
                     if (soundcheck ){
                         soundcheck = false;
                         sound.pause();
-                        sound_sprite_button.setTexture(new Texture("sound_down.png"));
+                        sound_sprite_button.setTexture(new Texture("sound_down_edit.jpg"));
                     }
                     else {
                         sound.play(0.5f);
                         soundcheck = true;
-                        sound_sprite_button.setTexture(new Texture("sound_up.png"));
+                        sound_sprite_button.setTexture(new Texture("sound_up_edit.jpg"));
                     }
                     g.drawSprite(sound_sprite_button);
                 }
@@ -149,7 +152,8 @@ public class SuperZuckGame extends BasicGame {
     }
 
     public void renderEndscreen(Graphics g){
-
+	    g.setBackgroundColor(Color.BLACK);
+	    g.drawTexture(new Texture("Full Flour Alchemist (1).png"),width/2-250,height/2-250);
     }
 
 }
