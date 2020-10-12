@@ -11,8 +11,4 @@ public class ItemObject extends GameObject {
     public boolean pickable() {
         return true;
     }
-
-    public void picked(){
-     //   super.toThumnaZ();
-    }
 }

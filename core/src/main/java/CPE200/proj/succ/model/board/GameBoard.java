@@ -4,6 +4,7 @@ import CPE200.proj.succ.Control;
 import CPE200.proj.succ.model.GameObject;
 import CPE200.proj.succ.model.GameObjectType;
 import CPE200.proj.succ.model.GameState;
+import CPE200.proj.succ.model.item.Flour;
 import CPE200.proj.succ.model.staticObject.Police;
 import CPE200.proj.succ.model.staticObject.Wall;
 import CPE200.proj.succ.model.movable.Bribe;
@@ -173,7 +174,7 @@ public class GameBoard {
             board[0][y] = new Wall(0,y);
             board[row-1][y] = new Wall(row-1,y);
         }
-
+        board[2][13] = new Flour(2,13);
         board[2][4] = new Wall(2,4);
         board[2][5] = new Wall(2,5);
         board[2][8] = new Wall(2,8);

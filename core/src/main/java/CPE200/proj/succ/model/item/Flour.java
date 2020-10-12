@@ -1,4 +1,12 @@
 package CPE200.proj.succ.model.item;
 
-public class Flour {
+import CPE200.proj.succ.model.GameObjectType;
+import com.badlogic.gdx.graphics.Texture;
+
+public class Flour extends ItemObject{
+    public Flour(int i,int j){
+        super(i,j);
+        super.texture = new Texture("flour.png");
+        super.type = GameObjectType.Flour;
+    }
 }
