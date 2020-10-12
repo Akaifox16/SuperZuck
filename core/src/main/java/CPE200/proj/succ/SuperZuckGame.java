@@ -46,19 +46,15 @@ public class SuperZuckGame extends BasicGame {
                     case Player_Move:
                         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
                             game.moveRight();
-                            game.nextPhase();
                         }
                         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
                             game.moveLeft();
-                            game.nextPhase();
                         }
                         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
                             game.moveUp();
-                            game.nextPhase();
                         }
                         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
                             game.moveDown();
-                            game.nextPhase();
                         }
                         break;
                     case Police_Check:

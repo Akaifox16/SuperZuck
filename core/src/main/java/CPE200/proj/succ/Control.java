@@ -76,10 +76,12 @@ public class Control {
             gameBoard.toThumnaZ(rightTile);
             gameBoard.setThumnazX(gameBoard.getThumnazX());
             gameBoard.setThumnazY(gameBoard.getThumnazY()+1);
+            nextPhase();
         }else if(gameBoard().canRight(rightTile)){
             manageNextObject(rightTile,gameBoard.rightObject(rightTile));
             gameBoard.setThumnazX(gameBoard.getThumnazX());
             gameBoard.setThumnazY(gameBoard.getThumnazY()+1);
+            nextPhase();
         }
 
     }
@@ -91,10 +93,12 @@ public class Control {
             gameBoard.toThumnaZ(leftTile);
             gameBoard.setThumnazX(gameBoard.getThumnazX());
             gameBoard.setThumnazY(gameBoard.getThumnazY()-1);
+            nextPhase();
         }else if(gameBoard.canLeft(leftTile)){
             manageNextObject(leftTile,gameBoard.leftObject(leftTile));
             gameBoard.setThumnazX(gameBoard.getThumnazX());
             gameBoard.setThumnazY(gameBoard.getThumnazY()-1);
+            nextPhase();
         }
     }
     public void moveUp(){
@@ -105,10 +109,12 @@ public class Control {
             gameBoard.toThumnaZ(upTile);
             gameBoard.setThumnazX(gameBoard.getThumnazX()-1);
             gameBoard.setThumnazY(gameBoard.getThumnazY());
+            nextPhase();
         }else if(gameBoard().canUp(upTile)){
             manageNextObject(upTile,gameBoard.upperObject(upTile));
             gameBoard.setThumnazX(gameBoard.getThumnazX()-1);
             gameBoard.setThumnazY(gameBoard.getThumnazY());
+            nextPhase();
         }
     }
     public void moveDown(){
@@ -119,10 +125,12 @@ public class Control {
             gameBoard.toThumnaZ(downTile);
             gameBoard.setThumnazX(gameBoard.getThumnazX()+1);
             gameBoard.setThumnazY(gameBoard.getThumnazY());
+            nextPhase();
         }else if(gameBoard().canDown(downTile)){
             manageNextObject(downTile,gameBoard.lowerObject(downTile));
             gameBoard.setThumnazX(gameBoard.getThumnazX()+1);
             gameBoard.setThumnazY(gameBoard.getThumnazY());
+            nextPhase();
         }
     }
 }
