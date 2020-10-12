@@ -5,6 +5,7 @@ import CPE200.proj.succ.model.GameObject;
 import CPE200.proj.succ.model.GameObjectType;
 import CPE200.proj.succ.model.GameState;
 import CPE200.proj.succ.model.item.Flour;
+import CPE200.proj.succ.model.item.ItemObject;
 import CPE200.proj.succ.model.staticObject.Police;
 import CPE200.proj.succ.model.staticObject.Wall;
 import CPE200.proj.succ.model.movable.Bribe;
@@ -16,6 +17,7 @@ import java.util.List;
 
 public class GameBoard {
     private final GameObject[][] board;
+    private List<ItemObject> inventory;
     private int thumnazX , thumnazY; // index ของ main character
     private List<Police> polices;
     private final int row;
@@ -157,7 +159,7 @@ public class GameBoard {
         }
         this.row = i;
         this.column = j;
-
+        inventory = new ArrayList<ItemObject>();
         polices = new ArrayList<Police>();
     }
 

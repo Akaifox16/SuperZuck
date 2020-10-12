@@ -9,10 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ThumnaZ extends GameObject {
-    private List<ItemObject> inventory;
     public ThumnaZ(int i,int j){
         super(i,j);
-        inventory = new ArrayList<ItemObject>();
         super.texture = new Texture("suit_man.png");
         super.type = GameObjectType.Thumnaz;
     }

@@ -51,6 +51,17 @@ public class Control {
                 this.currentState = GameState.Stage1;break;
         }
     }
+    public void manageNextObject(GameObject obj , GameObject nextObj){
+        switch (obj.getType()){
+            case Bribe:
+                gameBoard.toBribe(nextObj);
+                gameBoard.toThumnaZ(obj);
+                gameBoard.toNull(gameBoard.getThumnaz());
+            case Flour:
+            case Key:
+
+        }
+    }
 
     public void moveRight(){
         GameObject rightTile = gameBoard.board(gameBoard.getThumnazX(), gameBoard.getThumnazY()+1);
@@ -61,9 +72,7 @@ public class Control {
             gameBoard.setThumnazX(gameBoard.getThumnazX());
             gameBoard.setThumnazY(gameBoard.getThumnazY()+1);
         }else if(gameBoard().canRight(rightTile)){
-            gameBoard.toBribe(gameBoard.rightObject(rightTile));
-            gameBoard.toThumnaZ(rightTile);
-            gameBoard.toNull(gameBoard.getThumnaz());
+            manageNextObject(rightTile,gameBoard.rightObject(rightTile));
             gameBoard.setThumnazX(gameBoard.getThumnazX());
             gameBoard.setThumnazY(gameBoard.getThumnazY()+1);
         }
@@ -78,9 +87,7 @@ public class Control {
             gameBoard.setThumnazX(gameBoard.getThumnazX());
             gameBoard.setThumnazY(gameBoard.getThumnazY()-1);
         }else if(gameBoard.canLeft(leftTile)){
-            gameBoard.toBribe(gameBoard.leftObject(leftTile));
-            gameBoard.toThumnaZ(leftTile);
-            gameBoard.toNull(gameBoard.getThumnaz());
+            manageNextObject(leftTile,gameBoard.leftObject(leftTile));
             gameBoard.setThumnazX(gameBoard.getThumnazX());
             gameBoard.setThumnazY(gameBoard.getThumnazY()-1);
         }
@@ -94,9 +101,7 @@ public class Control {
             gameBoard.setThumnazX(gameBoard.getThumnazX()-1);
             gameBoard.setThumnazY(gameBoard.getThumnazY());
         }else if(gameBoard().canUp(upTile)){
-            gameBoard.toBribe(gameBoard.upperObject(upTile));
-            gameBoard.toThumnaZ(upTile);
-            gameBoard.toNull(gameBoard.getThumnaz());
+            manageNextObject(upTile,gameBoard.upperObject(upTile));
             gameBoard.setThumnazX(gameBoard.getThumnazX()-1);
             gameBoard.setThumnazY(gameBoard.getThumnazY());
         }
@@ -110,9 +115,7 @@ public class Control {
             gameBoard.setThumnazX(gameBoard.getThumnazX()+1);
             gameBoard.setThumnazY(gameBoard.getThumnazY());
         }else if(gameBoard().canDown(downTile)){
-            gameBoard.toBribe(gameBoard.lowerObject(downTile));
-            gameBoard.toThumnaZ(downTile);
-            gameBoard.toNull(gameBoard.getThumnaz());
+            manageNextObject(downTile,gameBoard.lowerObject(downTile));
             gameBoard.setThumnazX(gameBoard.getThumnazX()+1);
             gameBoard.setThumnazY(gameBoard.getThumnazY());
         }
