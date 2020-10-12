@@ -18,7 +18,7 @@ public class SuperZuckGame extends BasicGame {
     private int boardOffsetX, boardOffsetY;
 	private Texture BackGround;
 	private Sound sound;
-	private boolean soundcheck = false;
+	private boolean soundcheck = true;
 	private Sprite sound_sprite_button;
 	private Sprite play_sprite_button;
 
