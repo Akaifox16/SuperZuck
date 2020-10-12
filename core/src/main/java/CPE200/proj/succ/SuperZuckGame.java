@@ -21,6 +21,7 @@ public class SuperZuckGame extends BasicGame {
 	private boolean soundcheck = true;
 	private Sprite sound_sprite_button;
 	private Sprite play_sprite_button;
+	private Sprite restartState;
 
 	@Override
     public void initialise() {
@@ -34,8 +35,11 @@ public class SuperZuckGame extends BasicGame {
         play_sprite_button = new Sprite(new Texture("play_button.png"));
         play_sprite_button.setPosition(width/2-80,height/2);
         //------------------------------Sprite_sound------------------------------------------------
-        sound_sprite_button = new Sprite(new Texture("sound_up_edit.jpg"));
-        sound_sprite_button.setPosition(width-180,height-100);
+        sound_sprite_button = new Sprite(new Texture("sound_up.png"));
+        sound_sprite_button.setPosition(width-180,height-115);
+        //------------------------------restartstate------------------------------------------------
+        restartState = new Sprite(new Texture("restart.png"));
+        restartState.setPosition(width-180,height-250);
     }
     
     @Override
@@ -138,22 +142,38 @@ public class SuperZuckGame extends BasicGame {
                     if (soundcheck ){
                         soundcheck = false;
                         sound.pause();
-                        sound_sprite_button.setTexture(new Texture("sound_down_edit.jpg"));
+                        sound_sprite_button.setTexture(new Texture("mute.png"));
                     }
                     else {
                         sound.play(0.5f);
                         soundcheck = true;
-                        sound_sprite_button.setTexture(new Texture("sound_up_edit.jpg"));
+                        sound_sprite_button.setTexture(new Texture("sound_up.png"));
                     }
                     g.drawSprite(sound_sprite_button);
                 }
             }
         }
+
     }
 
     public void renderEndscreen(Graphics g){
 	    g.setBackgroundColor(Color.BLACK);
-	    g.drawTexture(new Texture("Full Flour Alchemist (1).png"),width/2-250,height/2-250);
+	    g.drawTexture(new Texture("end bg.jpg"),0,0);
+	   //g.drawTexture(new Texture("Full Flour Alchemist (1).png"),width/2-250,height/2-250);
+        if (Gdx.input.justTouched()){
+            game.setCurrentState(GameState.Stage1);
+        }
+    }
+
+    public void renderRestartstate (Graphics g){
+	    g.drawSprite(restartState);
+        if (Gdx.input.justTouched()) {
+            if (Gdx.input.getX() > restartState.getX() && Gdx.input.getX() < restartState.getX() + restartState.getWidth()) {
+                if (Gdx.input.getY() > restartState.getY() && Gdx.input.getY() < restartState.getY() + restartState.getHeight()) {
+                    game.restartstate();
+                }
+            }
+        }
     }
 
 }

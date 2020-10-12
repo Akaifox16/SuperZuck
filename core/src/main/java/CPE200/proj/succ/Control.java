@@ -38,6 +38,9 @@ public class Control {
                 this.currentPhase = TurnState.Player_Move;break;
         }
     }
+
+    public void restartstate(){ }
+
     public void nextStage(){
         switch (currentState){
             case Stage1:
