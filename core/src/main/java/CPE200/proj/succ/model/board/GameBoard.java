@@ -105,7 +105,12 @@ public class GameBoard {
         polices.add(police);
     }
     public void addFlour(int i , int j){
-        Flour flour = new Flour(i , j);
+        Flour flour = Flour.flour(i,j);
+        board[i][j] = flour;
+        flours.add(flour);
+    }
+    public void addCoke(int i , int j){
+        Flour flour = Flour.coke(i,j);
         board[i][j] = flour;
         flours.add(flour);
     }
@@ -118,53 +123,48 @@ public class GameBoard {
             GameObject lower = lowerObject(police);
             switch (police.getState()) {
                 case Suspect:
-                    switch (left.getType()) {
-                        case Bribe:
-                            toNull(left);
-                            police.bribed();break;
-                        case Thumnaz:
-                            game.setCurrentState(GameState.GameOver);
-                    }
-                    switch (right.getType()) {
-                        case Bribe:
-                            toNull(right);
-                            police.bribed();break;
-                        case Thumnaz:
-                            game.setCurrentState(GameState.GameOver);
-                    }
-                    switch (upper.getType()) {
-                        case Bribe:
-                            toNull(upper);
-                            police.bribed();break;
-                        case Thumnaz:
-                            game.setCurrentState(GameState.GameOver);
-                    }
-                    switch (lower.getType()) {
-                        case Bribe:
-                            toNull(lower);
-                            police.bribed();break;
-                        case Thumnaz:
-                            game.setCurrentState(GameState.GameOver);
+                    if(left.getType() != GameObjectType.NULL){
+                        switch (left.getType()) {
+                            case Bribe:
+                                toNull(left);
+                                police.bribed();break;
+                            case Thumnaz:
+                                game.setCurrentState(GameState.GameOver);
+                        }
+                    }else if(right.getType() != GameObjectType.NULL){
+                        switch (right.getType()) {
+                            case Bribe:
+                                toNull(right);
+                                police.bribed();break;
+                            case Thumnaz:
+                                game.setCurrentState(GameState.GameOver);
+                        }
+                    }else if(upper.getType() != GameObjectType.NULL){
+                        switch (upper.getType()) {
+                            case Bribe:
+                                toNull(upper);
+                                police.bribed();break;
+                            case Thumnaz:
+                                game.setCurrentState(GameState.GameOver);
+                        }
+                    }else if(lower.getType() != GameObjectType.NULL){
+                        switch (lower.getType()) {
+                            case Bribe:
+                                toNull(lower);
+                                police.bribed();break;
+                            case Thumnaz:
+                                game.setCurrentState(GameState.GameOver);
+                        }
                     }
                 case Sleep:
                     if(police.getBribeCoolDown() > 0)
                         police.setBribeCoolDown(police.getBribeCoolDown() - 1);
                     else {
-                        switch (left.getType()) {
-                            case Thumnaz:
-                                police.suspect();
-                        }
-                        switch (right.getType()) {
-                            case Thumnaz:
-                                police.suspect();
-                        }
-                        switch (upper.getType()) {
-                            case Thumnaz:
-                                police.suspect();
-                        }
-                        switch (lower.getType()) {
-                            case Thumnaz:
-                                police.suspect();
+                        if(left.getType() == GameObjectType.Thumnaz ||
+                        right.getType() == GameObjectType.Thumnaz ||
+                        upper.getType() == GameObjectType.Thumnaz ||
+                        lower.getType() == GameObjectType.Thumnaz){
+                            police.suspect();
                         }
                     }
             }
