@@ -38,7 +38,7 @@ public class Control {
         }
     }
 
-    public void restartstate(){
+    public void restartState(){
         gameBoard = gameBoard.newBoard(currentState);
     }
 
@@ -78,7 +78,15 @@ public class Control {
                 break;
             case StageDoor:
                 if(gameBoard.checkFlours()){
-                    nextStage();restartstate();
+                    nextStage();
+                    restartState();
+                }
+                break;
+            case Door:
+                if(gameBoard.haveKey()){
+                    gameBoard.toNull(gameBoard.getThumnaz());
+                    gameBoard.toThumnaZ(obj);
+                    gameBoard.setThumnaz(obj.row(),obj.column());
                 }
         }
     }

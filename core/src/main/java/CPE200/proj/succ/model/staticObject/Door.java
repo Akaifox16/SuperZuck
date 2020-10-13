@@ -15,4 +15,7 @@ public class Door extends GameObject {
         return new Door(i,j ,new Texture("stageDoor.png"),GameObjectType.StageDoor);
     }
 
+    public static Door door(int i, int j){
+        return new Door(i,j,new Texture("lockedDoor.png"),GameObjectType.Door);
+    }
 }
