@@ -173,7 +173,7 @@ public class SuperZuckGame extends BasicGame {
         if (Gdx.input.justTouched()) {
             if (Gdx.input.getX() > restartState.getX() && Gdx.input.getX() < restartState.getX() + restartState.getWidth()) {
                 if (Gdx.input.getY() > restartState.getY() && Gdx.input.getY() < restartState.getY() + restartState.getHeight()) {
-                    game.restartstate();
+                    game.restartState();
                 }
             }
         }

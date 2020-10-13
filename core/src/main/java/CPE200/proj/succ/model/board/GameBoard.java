@@ -5,6 +5,7 @@ import CPE200.proj.succ.model.GameObject;
 import CPE200.proj.succ.model.GameObjectType;
 import CPE200.proj.succ.model.GameState;
 import CPE200.proj.succ.model.item.Flour;
+import CPE200.proj.succ.model.item.ItemObject;
 import CPE200.proj.succ.model.item.Key;
 import CPE200.proj.succ.model.staticObject.Door;
 import CPE200.proj.succ.model.staticObject.Police;
@@ -172,6 +173,19 @@ public class GameBoard {
     public boolean checkFlours(){
         return flours.isEmpty();
     }
+    public boolean haveKey(){
+        GameObject key = null;
+        for (GameObject item:inventory) {
+            if(item.getType() == GameObjectType.Key){
+                key = item;
+            }
+        }
+        if(key != null){
+            inventory.remove(key);
+            return  true;
+        }
+        return false;
+    }
 
     public GameBoard(int i , int j){
         this.board = new GameObject[i][j];
@@ -191,18 +205,15 @@ public class GameBoard {
         GameBoard newBoard =  new GameBoard(13,18);
         switch (state){
             case Stage1: newBoard.Stage1();break;
-            case Stage2: newBoard.Stage1();break;
-            case Stage3: newBoard.Stage1();break;
-            case Stage4: newBoard.Stage1();break;
-            case Stage5: newBoard.Stage1();break;
+            case Stage2: newBoard.Stage2();break;
+            case Stage3: newBoard.Stage3();break;
+            case Stage4: newBoard.Stage4();break;
+            case Stage5: newBoard.Stage5();break;
         }
         return newBoard;
     }
-    public void Stage1(){
-        this.board[3][4] = new ThumnaZ(3,4);
-        this.thumnazX = 3;
-        this.thumnazY = 4;
 
+    public void fillWall(){
         for(int x = 0 ; x < row ; x++) {
             this.board[x][0] = new Wall(x,0);
             this.board[x][column-1] = new Wall(x,column-1);
@@ -211,6 +222,13 @@ public class GameBoard {
             this.board[0][y] = new Wall(0,y);
             this.board[row-1][y] = new Wall(row-1,y);
         }
+    }
+    public void Stage1(){
+        this.board[3][4] = new ThumnaZ(3,4);
+        this.thumnazX = 3;
+        this.thumnazY = 4;
+        this.fillWall();
+
         addFlour(2,13);
         this.board[2][14] = new Key(2,14);
 
@@ -239,8 +257,43 @@ public class GameBoard {
 
         this.board[2][2] = new Bribe(2,2);
         this.board[6][6] = new Bribe(6,6);
-
+        this.board[9][3] = Door.door(9,3);
         this.board[10][3] = Door.StageDoor(10,3);
         this.addPolice(10,15);
+    }
+
+    public void Stage2(){
+        this.board[3][6] = new ThumnaZ(3,6);
+        this.thumnazX = 3;
+        this.thumnazY = 6;
+        this.fillWall();
+        addFlour(6,6);
+        this.board[10][6] = Door.StageDoor(10,6);
+    }
+    public void Stage3(){
+        this.board[3][5] = new ThumnaZ(3,5);
+        this.thumnazX = 3;
+        this.thumnazY = 5;
+        this.fillWall();
+        addFlour(6,5);
+        addFlour(7,5);
+        addFlour(8,5);
+        this.board[10][5] = Door.StageDoor(10,5);
+    }
+    public void Stage4(){
+        this.board[3][2] = new ThumnaZ(3,2);
+        this.thumnazX = 3;
+        this.thumnazY = 2;
+        this.fillWall();
+        addFlour(6,2);
+        this.board[10][2] = Door.StageDoor(10,2);
+    }
+    public void Stage5(){
+        this.board[3][10] = new ThumnaZ(3,10);
+        this.thumnazX = 3;
+        this.thumnazY = 10;
+        this.fillWall();
+        addFlour(6,10);
+        this.board[10][10] = Door.StageDoor(10,10);
     }
 }
