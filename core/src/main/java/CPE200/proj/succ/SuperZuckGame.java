@@ -32,8 +32,8 @@ public class SuperZuckGame extends BasicGame {
         sound = Gdx.audio.newSound(Gdx.files.internal("song.mp3"));
         sound.play(0.5f);
         //------------------------------Sprite-----------------------------------------------------
-        play_sprite_button = new Sprite(new Texture("play_button.png"));
-        play_sprite_button.setPosition(width/2-80,height/2);
+        play_sprite_button = new Sprite(new Texture("play_spare.png"));
+        play_sprite_button.setPosition(width/2-125,height/2-(float)37.5+100);
         //------------------------------Sprite_sound------------------------------------------------
         sound_sprite_button = new Sprite(new Texture("sound_up.png"));
         sound_sprite_button.setPosition(width-180,height-115);
@@ -164,6 +164,7 @@ public class SuperZuckGame extends BasicGame {
 	   //g.drawTexture(new Texture("Full Flour Alchemist (1).png"),width/2-250,height/2-250);
         if (Gdx.input.justTouched()){
             game.setCurrentState(GameState.Stage1);
+            game.restartstate();
         }
     }
 
