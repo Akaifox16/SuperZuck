@@ -5,7 +5,6 @@ import CPE200.proj.succ.model.GameObject;
 import CPE200.proj.succ.model.GameObjectType;
 import CPE200.proj.succ.model.GameState;
 import CPE200.proj.succ.model.item.Flour;
-import CPE200.proj.succ.model.item.ItemObject;
 import CPE200.proj.succ.model.item.Key;
 import CPE200.proj.succ.model.staticObject.Door;
 import CPE200.proj.succ.model.staticObject.Police;
@@ -22,12 +21,14 @@ public class GameBoard {
     private List<GameObject> inventory;
     private int thumnazX , thumnazY; // index ของ main character
     private List<Police> polices;
+    private List<Flour> flours;
     private final int row;
     private final int column;
 
     public GameObject board(int i , int j){
         return  board[i][j];
     }
+    public void setThumnaz(int x , int y){setThumnazX(x);setThumnazY(y);}
     public void setThumnazX(int thumnazX) {
         this.thumnazX = thumnazX;
     }
@@ -63,35 +64,49 @@ public class GameBoard {
     public List<GameObject> getInventory() {
         return inventory;
     }
+    public List<Flour> getFlours() {
+        return flours;
+    }
+
     public GameObject leftObject(GameObject temp){return board(temp.row(), temp.column()-1);}
     public GameObject rightObject(GameObject temp){return board(temp.row(),temp.column()+1);}
     public GameObject upperObject(GameObject temp){return board(temp.row()-1,temp.column());}
     public GameObject lowerObject(GameObject temp){return board(temp.row()+1,temp.column());}
+
     public boolean canLeft(GameObject left){
         if(left.movable() || left.pickable())
             return leftObject(left).getType() == GameObjectType.NULL || leftObject(left).pickable();
+        else if(left.getType() == GameObjectType.Door || left.getType() == GameObjectType.StageDoor) return true;
         return false;
     }
     public boolean canRight(GameObject right){
         if(right.movable() || right.pickable()){
             return rightObject(right).getType() == GameObjectType.NULL || rightObject(right).pickable();
-        }
+        }else if(right.getType() == GameObjectType.Door || right.getType() == GameObjectType.StageDoor) return true;
         return false;
     }
     public boolean canUp(GameObject upper){
         if(upper.movable() || upper.pickable())
             return upperObject(upper).getType() == GameObjectType.NULL || upperObject(upper).pickable();
+        else if(upper.getType() == GameObjectType.Door || upper.getType() == GameObjectType.StageDoor) return true;
         return false;
     }
     public boolean canDown(GameObject lower){
         if(lower.movable() || lower.pickable())
             return lowerObject(lower).getType() == GameObjectType.NULL || lowerObject(lower).pickable();
+        else if(lower.getType() == GameObjectType.Door || lower.getType() == GameObjectType.StageDoor) return true;
         return false;
     }
+
     public void addPolice(int i , int j){
         Police police = new Police(i, j);
         board[i][j] = police;
         polices.add(police);
+    }
+    public void addFlour(int i , int j){
+        Flour flour = new Flour(i , j);
+        board[i][j] = flour;
+        flours.add(flour);
     }
 
     public void checkPolice(Control game){
@@ -154,63 +169,78 @@ public class GameBoard {
             }
         }
     }
+    public boolean checkFlours(){
+        return flours.isEmpty();
+    }
 
     public GameBoard(int i , int j){
-        board = new GameObject[i][j];
+        this.board = new GameObject[i][j];
         for (int x = 0 ; x < i ; x++) {
             for (int y = 0 ; y < j ; y++) {
-                board[x][y] = new GameObject(x,y);
+                this.board[x][y] = new GameObject(x,y);
             }
         }
         this.row = i;
         this.column = j;
-        inventory = new ArrayList<GameObject>();
-        polices = new ArrayList<Police>();
+        this.inventory = new ArrayList<GameObject>();
+        this.flours = new ArrayList<Flour>();
+        this.polices = new ArrayList<Police>();
     }
 
+    public GameBoard newBoard(GameState state){
+        GameBoard newBoard =  new GameBoard(13,18);
+        switch (state){
+            case Stage1: newBoard.Stage1();break;
+            case Stage2: newBoard.Stage1();break;
+            case Stage3: newBoard.Stage1();break;
+            case Stage4: newBoard.Stage1();break;
+            case Stage5: newBoard.Stage1();break;
+        }
+        return newBoard;
+    }
     public void Stage1(){
-        board[3][4] = new ThumnaZ(3,4);
-        thumnazX = 3;
-        thumnazY = 4;
+        this.board[3][4] = new ThumnaZ(3,4);
+        this.thumnazX = 3;
+        this.thumnazY = 4;
 
         for(int x = 0 ; x < row ; x++) {
-            board[x][0] = new Wall(x,0);
-            board[x][column-1] = new Wall(x,column-1);
+            this.board[x][0] = new Wall(x,0);
+            this.board[x][column-1] = new Wall(x,column-1);
         }
         for(int y = 1 ; y < column ; y++){
-            board[0][y] = new Wall(0,y);
-            board[row-1][y] = new Wall(row-1,y);
+            this.board[0][y] = new Wall(0,y);
+            this.board[row-1][y] = new Wall(row-1,y);
         }
-        board[2][13] = new Flour(2,13);
-        board[2][14] = new Key(2,14);
+        addFlour(2,13);
+        this.board[2][14] = new Key(2,14);
 
-        board[2][4] = new Wall(2,4);
-        board[2][5] = new Wall(2,5);
-        board[2][8] = new Wall(2,8);
-        board[2][9] = new Wall(2,9);
-        board[3][5] = new Wall(3,5);
-        board[3][8] = new Wall(3,8);
-        board[4][1] = new Wall(4,1);
-        board[4][2] = new Wall(4,2);
-        board[4][10] = new Wall(4,10);
-        board[5][9] = new Wall(5,9);
-        board[5][10] = new Wall(5,10);
-        board[7][7] = new Wall(7,7);
-        board[9][1] = new Wall(9,1);
-        board[9][2] = new Wall(9,2);
-        board[9][4] = new Wall(9,4);
-        board[9][5] = new Wall(9,5);
-        board[9][9] = new Wall(9,9);
-        board[10][8] = new Wall(10,8);
-        board[11][4] = new Wall(11,4);
-        board[11][1] = new Wall(11,1);
-        board[11][2] = new Wall(11,2);
-        board[11][3] = new Wall(11,3);
+        this.board[2][4] = new Wall(2,4);
+        this.board[2][5] = new Wall(2,5);
+        this.board[2][8] = new Wall(2,8);
+        this.board[2][9] = new Wall(2,9);
+        this.board[3][5] = new Wall(3,5);
+        this.board[3][8] = new Wall(3,8);
+        this.board[4][1] = new Wall(4,1);
+        this.board[4][2] = new Wall(4,2);
+        this.board[4][10] = new Wall(4,10);
+        this.board[5][9] = new Wall(5,9);
+        this.board[5][10] = new Wall(5,10);
+        this.board[7][7] = new Wall(7,7);
+        this.board[9][1] = new Wall(9,1);
+        this.board[9][2] = new Wall(9,2);
+        this.board[9][4] = new Wall(9,4);
+        this.board[9][5] = new Wall(9,5);
+        this.board[9][9] = new Wall(9,9);
+        this.board[10][8] = new Wall(10,8);
+        this.board[11][4] = new Wall(11,4);
+        this.board[11][1] = new Wall(11,1);
+        this.board[11][2] = new Wall(11,2);
+        this.board[11][3] = new Wall(11,3);
 
-        board[2][2] = new Bribe(2,2);
-        board[6][6] = new Bribe(6,6);
+        this.board[2][2] = new Bribe(2,2);
+        this.board[6][6] = new Bribe(6,6);
 
-        board[10][3] = Door.StageDoor(10,3);
-        addPolice(10,15);
+        this.board[10][3] = Door.StageDoor(10,3);
+        this.addPolice(10,15);
     }
 }
