@@ -15,7 +15,7 @@ public class Control {
 
 
     public Control(){
-        gameBoard = new GameBoard(13,18);
+        gameBoard = new GameBoard(12,18);
         gameBoard = gameBoard.newBoard(GameState.Stage1);
     }
 
@@ -64,6 +64,8 @@ public class Control {
                 gameBoard.toNull(gameBoard.getThumnaz());
                 gameBoard.setThumnaz(obj.row(),obj.column());
                 break;
+            case Coke:
+                setCurrentState(GameState.GameOver);break;
             case Flour:
                 gameBoard.getFlours().remove(obj);
                 gameBoard.toThumnaZ(obj);
@@ -88,6 +90,11 @@ public class Control {
                     gameBoard.toThumnaZ(obj);
                     gameBoard.setThumnaz(obj.row(),obj.column());
                 }
+            case Converter:
+                gameBoard.convertFlours();
+                gameBoard.toNull(gameBoard.getThumnaz());
+                gameBoard.toThumnaZ(obj);
+                gameBoard.setThumnaz(obj.row(),obj.column());
         }
     }
 

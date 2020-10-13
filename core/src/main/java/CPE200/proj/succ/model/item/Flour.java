@@ -14,6 +14,19 @@ public class Flour extends ItemObject{
         return new Flour(i,j, new Texture("powder.png"),GameObjectType.Flour);
     }
     public static Flour coke(int i ,int j){
-        return new Flour(i,j, new Texture("coke.png"),GameObjectType.Flour);
+        return new Flour(i,j, new Texture("coke.png"),GameObjectType.Coke);
+    }
+
+    public void convert(){
+        switch (type){
+            case Flour:
+                this.texture = new Texture("coke.png");
+                this.type = GameObjectType.Coke;
+                break;
+            case Coke:
+                this.texture = new Texture("powder.png");
+                this.type = GameObjectType.Flour;
+                break;
+        }
     }
 }

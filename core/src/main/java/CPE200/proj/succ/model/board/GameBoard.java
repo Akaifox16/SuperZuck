@@ -5,7 +5,7 @@ import CPE200.proj.succ.model.GameObject;
 import CPE200.proj.succ.model.GameObjectType;
 import CPE200.proj.succ.model.GameState;
 import CPE200.proj.succ.model.item.Flour;
-import CPE200.proj.succ.model.item.ItemObject;
+import CPE200.proj.succ.model.item.FlourConverter;
 import CPE200.proj.succ.model.item.Key;
 import CPE200.proj.succ.model.staticObject.Door;
 import CPE200.proj.succ.model.staticObject.Police;
@@ -46,6 +46,10 @@ public class GameBoard {
     public void toBribe(GameObject gameObject){
         board[gameObject.row()][gameObject.column()] = new Bribe(gameObject.row(),gameObject.column());
     }
+    public void convert(Flour flour){
+        flour.convert();
+        this.board[flour.row()][flour.column()] = flour;
+    }
 
     public int getRow() {
         return row;
@@ -75,28 +79,20 @@ public class GameBoard {
     public GameObject lowerObject(GameObject temp){return board(temp.row()+1,temp.column());}
 
     public boolean canLeft(GameObject left){
-        if(left.movable() || left.pickable())
-            return leftObject(left).getType() == GameObjectType.NULL || leftObject(left).pickable();
-        else if(left.getType() == GameObjectType.Door || left.getType() == GameObjectType.StageDoor) return true;
-        return false;
+        if(left.getType() == GameObjectType.Door || left.getType() == GameObjectType.StageDoor) return true;
+        return  left.pickable() || (left.movable()  && leftObject(left).getType() == GameObjectType.NULL) || (left.movable() && leftObject(left).pickable());
     }
     public boolean canRight(GameObject right){
-        if(right.movable() || right.pickable()){
-            return rightObject(right).getType() == GameObjectType.NULL || rightObject(right).pickable();
-        }else if(right.getType() == GameObjectType.Door || right.getType() == GameObjectType.StageDoor) return true;
-        return false;
+        if(right.getType() == GameObjectType.Door || right.getType() == GameObjectType.StageDoor) return true;
+        return  right.pickable() || (right.movable()  && rightObject(right).getType() == GameObjectType.NULL) || (right.movable() && rightObject(right).pickable());
     }
     public boolean canUp(GameObject upper){
-        if(upper.movable() || upper.pickable())
-            return upperObject(upper).getType() == GameObjectType.NULL || upperObject(upper).pickable();
-        else if(upper.getType() == GameObjectType.Door || upper.getType() == GameObjectType.StageDoor) return true;
-        return false;
+        if(upper.getType() == GameObjectType.Door || upper.getType() == GameObjectType.StageDoor) return true;
+        return  upper.pickable() || (upper.movable()  && upperObject(upper).getType() == GameObjectType.NULL) || (upper.movable() && upperObject(upper).pickable());
     }
     public boolean canDown(GameObject lower){
-        if(lower.movable() || lower.pickable())
-            return lowerObject(lower).getType() == GameObjectType.NULL || lowerObject(lower).pickable();
-        else if(lower.getType() == GameObjectType.Door || lower.getType() == GameObjectType.StageDoor) return true;
-        return false;
+        if(lower.getType() == GameObjectType.Door || lower.getType() == GameObjectType.StageDoor) return true;
+        return  lower.pickable() || (lower.movable()  && lowerObject(lower).getType() == GameObjectType.NULL) || (lower.movable() && lowerObject(lower).pickable());
     }
 
     public void addPolice(int i , int j){
@@ -110,11 +106,16 @@ public class GameBoard {
         flours.add(flour);
     }
     public void addCoke(int i , int j){
-        Flour flour = Flour.coke(i,j);
-        board[i][j] = flour;
-        flours.add(flour);
+        Flour coke = Flour.coke(i,j);
+        board[i][j] = coke;
+        flours.add(coke);
     }
 
+    public void convertFlours(){
+        for (int i = 0 ; i < flours.size() ; i++) {
+            this.convert(flours.get(i));
+        }
+    }
     public void checkPolice(Control game){
         for (Police police:polices) {
             GameObject left = leftObject(police);
@@ -187,6 +188,7 @@ public class GameBoard {
         return false;
     }
 
+
     public GameBoard(int i , int j){
         this.board = new GameObject[i][j];
         for (int x = 0 ; x < i ; x++) {
@@ -202,7 +204,7 @@ public class GameBoard {
     }
 
     public GameBoard newBoard(GameState state){
-        GameBoard newBoard =  new GameBoard(13,18);
+        GameBoard newBoard =  new GameBoard(12,18);
         switch (state){
             case Stage1: newBoard.Stage1();break;
             case Stage2: newBoard.Stage2();break;
@@ -261,7 +263,7 @@ public class GameBoard {
         this.board[10][3] = Door.StageDoor(10,3);
         this.addPolice(10,15);
     }
-
+    //need fixed
     public void Stage2(){
         this.board[3][6] = new ThumnaZ(3,6);
         this.thumnazX = 3;
@@ -278,6 +280,8 @@ public class GameBoard {
         addFlour(6,5);
         addFlour(7,5);
         addFlour(8,5);
+        addCoke(9,5);
+        this.board[9][6] = new FlourConverter(9,6);
         this.board[10][5] = Door.StageDoor(10,5);
     }
     public void Stage4(){

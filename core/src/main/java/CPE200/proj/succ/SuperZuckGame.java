@@ -118,6 +118,8 @@ public class SuperZuckGame extends BasicGame {
                     case Police:
                     case Wall:
                     case Bribe:
+                    case Coke:
+                    case Converter:
                         g.drawTexture(current.getTexture(),renderX,renderY);
                         break;
                     case NULL:
