@@ -88,10 +88,16 @@ public class SuperZuckGame extends BasicGame {
                 renderRestartstate(g);
                 break;
             }
-            case GameOver:
+            case GameOver: {
                 renderEndscreen(g);
                 break;
+            }
+            case GameClear:{
+                renderClear(g);
+                break;
+            }
         }
+
     }
 
     private void renderBoard(Graphics g){
@@ -164,7 +170,7 @@ public class SuperZuckGame extends BasicGame {
 	   //g.drawTexture(new Texture("Full Flour Alchemist (1).png"),width/2-250,height/2-250);
         if (Gdx.input.justTouched()){
             game.setCurrentState(GameState.Stage1);
-            game.restartstate();
+            game.restartState();
         }
     }
 
@@ -179,4 +185,12 @@ public class SuperZuckGame extends BasicGame {
         }
     }
 
+    public void renderClear (Graphics g){
+	    g.drawTexture(new Texture("complete_bg.jpg"),0,0);
+	    g.drawTexture(new Texture("complete_spare_new.png"),width/2-300,height/6);
+	    if (Gdx.input.justTouched()){
+            game.setCurrentState(GameState.Stage1);
+            game.restartState();
+        }
+    }
 }
