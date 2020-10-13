@@ -5,7 +5,6 @@ import CPE200.proj.succ.model.GameObjectType;
 import CPE200.proj.succ.model.GameState;
 import CPE200.proj.succ.model.TurnState;
 import CPE200.proj.succ.model.board.GameBoard;
-import CPE200.proj.succ.model.item.ItemObject;
 
 
 public class Control {
@@ -16,8 +15,8 @@ public class Control {
 
 
     public Control(){
-        gameBoard = new GameBoard(12,18);
-        gameBoard.Stage1();
+        gameBoard = new GameBoard(13,18);
+        gameBoard = gameBoard.newBoard(GameState.Stage1);
     }
 
     public GameBoard gameBoard() { return gameBoard; }
@@ -27,7 +26,7 @@ public class Control {
     public GameState getCurrentState() {
         return currentState;
     }
-    public void setCurrentState(GameState currentState) { this.currentState = currentState; }
+    public void setCurrentState(GameState currentState) { this.currentState = currentState;}
     public void nextPhase(){
         switch (currentPhase){
             case Player_Move:
@@ -40,12 +39,7 @@ public class Control {
     }
 
     public void restartstate(){
-        switch (currentState){
-            case Stage1:
-                gameBoard = new GameBoard(12,18);
-                gameBoard.Stage1();
-                break;
-        }
+        gameBoard = gameBoard.newBoard(currentState);
     }
 
     public void nextStage(){
@@ -59,7 +53,7 @@ public class Control {
             case Stage4:
                 this.currentState = GameState.Stage5;break;
             case Stage5:
-                this.currentState = GameState.Stage1;break;
+                this.currentState = GameState.GameClear;break;
         }
     }
     public void manageNextObject(GameObject obj , GameObject nextObj){
@@ -68,13 +62,24 @@ public class Control {
                 gameBoard.toBribe(nextObj);
                 gameBoard.toThumnaZ(obj);
                 gameBoard.toNull(gameBoard.getThumnaz());
+                gameBoard.setThumnaz(obj.row(),obj.column());
                 break;
             case Flour:
+                gameBoard.getFlours().remove(obj);
+                gameBoard.toThumnaZ(obj);
+                gameBoard.toNull(gameBoard.getThumnaz());
+                gameBoard.setThumnaz(obj.row(),obj.column());
+                break;
             case Key:
                 gameBoard.getInventory().add(obj);
                 gameBoard.toThumnaZ(obj);
                 gameBoard.toNull(gameBoard.getThumnaz());
+                gameBoard.setThumnaz(obj.row(),obj.column());
                 break;
+            case StageDoor:
+                if(gameBoard.checkFlours()){
+                    nextStage();restartstate();
+                }
         }
     }
 
@@ -84,13 +89,10 @@ public class Control {
             GameObject toSpace = gameBoard.getThumnaz();
             gameBoard.toNull(toSpace);
             gameBoard.toThumnaZ(rightTile);
-            gameBoard.setThumnazX(gameBoard.getThumnazX());
-            gameBoard.setThumnazY(gameBoard.getThumnazY()+1);
+            gameBoard.setThumnaz(rightTile.row(),rightTile.column());
             nextPhase();
         }else if(gameBoard().canRight(rightTile)){
             manageNextObject(rightTile,gameBoard.rightObject(rightTile));
-            gameBoard.setThumnazX(gameBoard.getThumnazX());
-            gameBoard.setThumnazY(gameBoard.getThumnazY()+1);
             nextPhase();
         }
 
@@ -101,13 +103,10 @@ public class Control {
             GameObject toSpace = gameBoard.getThumnaz();
             gameBoard.toNull(toSpace);
             gameBoard.toThumnaZ(leftTile);
-            gameBoard.setThumnazX(gameBoard.getThumnazX());
-            gameBoard.setThumnazY(gameBoard.getThumnazY()-1);
+            gameBoard.setThumnaz(leftTile.row(),leftTile.column());
             nextPhase();
         }else if(gameBoard.canLeft(leftTile)){
             manageNextObject(leftTile,gameBoard.leftObject(leftTile));
-            gameBoard.setThumnazX(gameBoard.getThumnazX());
-            gameBoard.setThumnazY(gameBoard.getThumnazY()-1);
             nextPhase();
         }
     }
@@ -117,13 +116,10 @@ public class Control {
             GameObject toSpace = gameBoard.getThumnaz();
             gameBoard.toNull(toSpace);
             gameBoard.toThumnaZ(upTile);
-            gameBoard.setThumnazX(gameBoard.getThumnazX()-1);
-            gameBoard.setThumnazY(gameBoard.getThumnazY());
+            gameBoard.setThumnaz(upTile.row(),upTile.column());
             nextPhase();
         }else if(gameBoard().canUp(upTile)){
             manageNextObject(upTile,gameBoard.upperObject(upTile));
-            gameBoard.setThumnazX(gameBoard.getThumnazX()-1);
-            gameBoard.setThumnazY(gameBoard.getThumnazY());
             nextPhase();
         }
     }
@@ -133,13 +129,10 @@ public class Control {
             GameObject toSpace = gameBoard.getThumnaz();
             gameBoard.toNull(toSpace);
             gameBoard.toThumnaZ(downTile);
-            gameBoard.setThumnazX(gameBoard.getThumnazX()+1);
-            gameBoard.setThumnazY(gameBoard.getThumnazY());
+            gameBoard.setThumnaz(downTile.row(),downTile.column());
             nextPhase();
         }else if(gameBoard().canDown(downTile)){
             manageNextObject(downTile,gameBoard.lowerObject(downTile));
-            gameBoard.setThumnazX(gameBoard.getThumnazX()+1);
-            gameBoard.setThumnazY(gameBoard.getThumnazY());
             nextPhase();
         }
     }

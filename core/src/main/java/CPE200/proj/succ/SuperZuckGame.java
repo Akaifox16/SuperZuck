@@ -81,7 +81,7 @@ public class SuperZuckGame extends BasicGame {
                 renderMusic(g);
                 break;
             }
-            case Stage1: {
+            case Stage1: case Stage2: case Stage3: case Stage4: case Stage5:{
                 g.setBackgroundColor(Color.GRAY);
                 renderBoard(g);
                 renderMusic(g);
@@ -97,8 +97,8 @@ public class SuperZuckGame extends BasicGame {
     private void renderBoard(Graphics g){
         g.setLineHeight(5);
         g.setColor(Color.BLACK);
-        for (int x = 0; x < 12; x++) {
-            for (int y = 0; y < 18; y++) {
+        for (int x = 0; x < game.gameBoard().getRow(); x++) {
+            for (int y = 0; y < game.gameBoard().getColumn(); y++) {
                 int renderX = boardOffsetX + (y * gridSize);
                 int renderY = boardOffsetY + (x * gridSize);
 
