@@ -112,8 +112,8 @@ public class GameBoard {
     }
 
     public void convertFlours(){
-        for (int i = 0 ; i < flours.size() ; i++) {
-            this.convert(flours.get(i));
+        for (Flour flour:flours) {
+            flour.convert();
         }
     }
     public void checkPolice(Control game){

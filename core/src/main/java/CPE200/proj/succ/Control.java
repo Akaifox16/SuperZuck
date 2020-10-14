@@ -37,7 +37,11 @@ public class Control {
                 this.currentPhase = TurnState.Player_Move;break;
         }
     }
-
+    private void moveThumnaz(GameObject obj){
+        gameBoard.toNull(gameBoard.getThumnaz());
+        gameBoard.toThumnaZ(obj);
+        gameBoard.setThumnaz(obj.row(),obj.column());
+    }
     public void restartState(){
         gameBoard = gameBoard.newBoard(currentState);
     }
@@ -60,23 +64,17 @@ public class Control {
         switch (obj.getType()){
             case Bribe:
                 gameBoard.toBribe(nextObj);
-                gameBoard.toThumnaZ(obj);
-                gameBoard.toNull(gameBoard.getThumnaz());
-                gameBoard.setThumnaz(obj.row(),obj.column());
+                moveThumnaz(obj);
                 break;
             case Coke:
                 setCurrentState(GameState.GameOver);break;
             case Flour:
                 gameBoard.getFlours().remove(obj);
-                gameBoard.toThumnaZ(obj);
-                gameBoard.toNull(gameBoard.getThumnaz());
-                gameBoard.setThumnaz(obj.row(),obj.column());
+                moveThumnaz(obj);
                 break;
             case Key:
                 gameBoard.getInventory().add(obj);
-                gameBoard.toThumnaZ(obj);
-                gameBoard.toNull(gameBoard.getThumnaz());
-                gameBoard.setThumnaz(obj.row(),obj.column());
+                moveThumnaz(obj);
                 break;
             case StageDoor:
                 if(gameBoard.checkFlours()){
@@ -86,15 +84,11 @@ public class Control {
                 break;
             case Door:
                 if(gameBoard.haveKey()){
-                    gameBoard.toNull(gameBoard.getThumnaz());
-                    gameBoard.toThumnaZ(obj);
-                    gameBoard.setThumnaz(obj.row(),obj.column());
+                    moveThumnaz(obj);
                 }
             case Converter:
                 gameBoard.convertFlours();
-                gameBoard.toNull(gameBoard.getThumnaz());
-                gameBoard.toThumnaZ(obj);
-                gameBoard.setThumnaz(obj.row(),obj.column());
+                moveThumnaz(obj);
         }
     }
 
