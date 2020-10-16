@@ -86,6 +86,7 @@ public class Control {
                 if(gameBoard.haveKey()){
                     moveThumnaz(obj);
                 }
+                break;
             case Converter:
                 gameBoard.convertFlours();
                 moveThumnaz(obj);
