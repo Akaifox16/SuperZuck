@@ -11,7 +11,7 @@ public class Police extends GameObject {
     private int bribeCoolDown;
 
     public void bribed(){
-        setBribeCoolDown(20);
+        setBribeCoolDown(35);
         state = PoliceState.Sleep;
         texture = new Texture("red boi.png");
     }
