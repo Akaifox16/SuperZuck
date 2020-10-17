@@ -33,8 +33,8 @@ public class Control {
             case Player_Move:
                 this.currentPhase = TurnState.Police_Check;break;
             case Police_Check:
-                this.currentPhase = TurnState.Bribe_CD;break;
-            case Bribe_CD:
+                this.currentPhase = TurnState.Object_Cool_down;break;
+            case Object_Cool_down:
                 this.currentPhase = TurnState.Player_Move;break;
         }
     }

@@ -16,17 +16,15 @@ import java.util.List;
 
 public class GameBoard {
     private final GameObject[][] board;
-    private final int row;
-    private final int column;
+    private final int ROW; // const row of board
+    private final int COLUMN; // const column of board
     private List<GameObject> inventory;
     private List<Police> polices;
     private List<Flour> flours;
-    private int thumnazX , thumnazY; // index ของ main character
+    private int thumnazX , thumnazY; // index of main character
     private GameObjectFactory factory;
 
-    public GameObject board(int i , int j){
-        return  board[i][j];
-    }
+    //setters
     public void setThumnaz(int x , int y){setThumnazX(x);setThumnazY(y);}
     public void setThumnazX(int thumnazX) {
         this.thumnazX = thumnazX;
@@ -35,6 +33,7 @@ public class GameBoard {
         this.thumnazY = thumnazY;
     }
 
+    //convert object to specific type
     public void toNull(GameObject gameObject){
         board[gameObject.row()][gameObject.column()] = new GameObject(gameObject.row(),gameObject.column());
     }
@@ -44,6 +43,8 @@ public class GameBoard {
     public void toBribe(GameObject gameObject){
         board[gameObject.row()][gameObject.column()] = new Bribe(gameObject.row(),gameObject.column());
     }
+
+    //add object to board
     public void addToBoard(int i, int j , GameObjectType type){
         GameObject obj = factory.create(i,j,type);
         board[i][j] = obj;
@@ -61,11 +62,15 @@ public class GameBoard {
 
     }
 
+    // getters
+    public GameObject board(int i , int j){
+        return  board[i][j];
+    }
     public int getRow() {
-        return row;
+        return ROW;
     }
     public int getColumn() {
-        return column;
+        return COLUMN;
     }
     public int getThumnazX() {
         return thumnazX;
@@ -82,12 +87,12 @@ public class GameBoard {
     public List<Flour> getFlours() {
         return flours;
     }
-
+    //get left,right,upper,lower object
     public GameObject leftObject(GameObject temp){return board(temp.row(), temp.column()-1);}
     public GameObject rightObject(GameObject temp){return board(temp.row(),temp.column()+1);}
     public GameObject upperObject(GameObject temp){return board(temp.row()-1,temp.column());}
     public GameObject lowerObject(GameObject temp){return board(temp.row()+1,temp.column());}
-
+    // check if object can go left,right,up,down
     public boolean canLeft(GameObject left){
         if(left.getType() == GameObjectType.Door || left.getType() == GameObjectType.StageDoor) return true;
         return  left.pickable() || (left.movable()  && leftObject(left).getType() == GameObjectType.NULL) || (left.movable() && leftObject(left).pickable());
@@ -105,12 +110,14 @@ public class GameBoard {
         return  lower.pickable() || (lower.movable()  && lowerObject(lower).getType() == GameObjectType.NULL) || (lower.movable() && lowerObject(lower).pickable());
     }
 
+    //convert all flour
     public void convertFlours(){
         for (Flour flour:flours) {
             flour.convert();
         }
     }
-    public void checkPolice(Control game) throws InterruptedException {
+
+    public void checkPolice(Control game) {
         for (Police police:polices) {
             GameObject left = leftObject(police);
             GameObject right = rightObject(police);
@@ -158,9 +165,11 @@ public class GameBoard {
             }
         }
     }
+    //check if collect all flour
     public boolean checkFlours(){
         return flours.isEmpty();
     }
+    //check if inventory have key
     public boolean haveKey(){
         GameObject key = null;
         for (GameObject item:inventory) {
@@ -175,7 +184,7 @@ public class GameBoard {
         return false;
     }
 
-
+    //constructor
     public GameBoard(int i , int j){
         this.board = new GameObject[i][j];
         for (int x = 0 ; x < i ; x++) {
@@ -183,14 +192,14 @@ public class GameBoard {
                 this.board[x][y] = new GameObject(x,y);
             }
         }
-        this.row = i;
-        this.column = j;
+        this.ROW = i;
+        this.COLUMN = j;
         this.factory = new GameObjectFactory();
         this.inventory = new ArrayList<GameObject>();
         this.flours = new ArrayList<Flour>();
         this.polices = new ArrayList<Police>();
     }
-
+    //new gameboard method
     public GameBoard newBoard(GameState state){
         GameBoard newBoard =  new GameBoard(12,18);
         switch (state){
@@ -204,13 +213,13 @@ public class GameBoard {
     }
 
     public void fillWall(){
-        for(int x = 0 ; x < row ; x++) {
+        for(int x = 0; x < ROW; x++) {
             addToBoard(x,0,GameObjectType.Wall);
-            addToBoard(x,column-1,GameObjectType.Wall);
+            addToBoard(x, COLUMN -1,GameObjectType.Wall);
         }
-        for(int y = 1 ; y < column ; y++){
+        for(int y = 1; y < COLUMN; y++){
             addToBoard(0,y,GameObjectType.Wall);
-            addToBoard(row-1,y,GameObjectType.Wall);
+            addToBoard(ROW -1,y,GameObjectType.Wall);
         }
     }
     public void Stage1(){

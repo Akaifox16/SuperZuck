@@ -11,7 +11,7 @@ import java.util.List;
 public class ThumnaZ extends GameObject {
     public ThumnaZ(int i,int j){
         super(i,j);
-        super.texture = new Texture("suit_man.png");
+        super.texture = new Texture("Player/Thumnaz.png");
         super.type = GameObjectType.Thumnaz;
     }
 

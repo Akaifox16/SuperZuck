@@ -4,6 +4,7 @@ import CPE200.proj.succ.model.item.Flour;
 import CPE200.proj.succ.model.item.FlourConverter;
 import CPE200.proj.succ.model.item.Key;
 import CPE200.proj.succ.model.movable.Bribe;
+import CPE200.proj.succ.model.movable.Gunner;
 import CPE200.proj.succ.model.movable.ThumnaZ;
 import CPE200.proj.succ.model.staticObject.Door;
 import CPE200.proj.succ.model.staticObject.Police;
@@ -34,6 +35,8 @@ public class GameObjectFactory {
                 return new GameObject(i,j);
             case Wall:
                 return new Wall(i,j);
+            case Gunner:
+                return new Gunner(i,j);
         }
         return null;
     }

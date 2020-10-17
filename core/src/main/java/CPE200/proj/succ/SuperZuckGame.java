@@ -62,12 +62,8 @@ public class SuperZuckGame extends BasicGame {
                         }
                         break;
                     case Police_Check:
-                        try {
-                            game.gameBoard().checkPolice(game);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    case Bribe_CD:
+                        game.gameBoard().checkPolice(game);
+                    case Object_Cool_down:
                         game.nextPhase();
                 }
         }

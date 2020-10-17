@@ -13,17 +13,17 @@ public class Police extends GameObject {
     public void bribed(){
         setBribeCoolDown(35);
         state = PoliceState.Sleep;
-        texture = new Texture("police.png");
+        texture = new Texture("Police/police.png");
     }
     public void caught(){
         this.state = PoliceState.Caught;
-        this.texture = new Texture("custody.png");
+        this.texture = new Texture("Police/custody.png");
     }
 
     public void setBribeCoolDown(int bribeCoolDown) {
         this.bribeCoolDown = bribeCoolDown;
     }
-    public void suspect(){this.state = PoliceState.Suspect;this.texture = new Texture("alertpolice.png");}
+    public void suspect(){this.state = PoliceState.Suspect;this.texture = new Texture("Police/alertpolice.png");}
 
     public PoliceState getState() {
         return state;
@@ -34,7 +34,7 @@ public class Police extends GameObject {
 
     public Police(int i, int j) {
         super(i, j);
-        super.texture = new Texture("police.png");
+        super.texture = new Texture("Police/police.png");
         super.type = GameObjectType.Police;
         state = PoliceState.Sleep;
     }
