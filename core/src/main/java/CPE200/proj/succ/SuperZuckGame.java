@@ -32,7 +32,7 @@ public class SuperZuckGame extends BasicGame {
         sound = Gdx.audio.newSound(Gdx.files.internal("song.mp3"));
         sound.play(0.5f);
         //------------------------------Sprite-----------------------------------------------------
-        play_sprite_button = new Sprite(new Texture("play_spare.png"));
+        play_sprite_button = new Sprite(new Texture("re.png"));
         play_sprite_button.setPosition(width/2-125,height/2-(float)37.5+100);
         //------------------------------Sprite_sound------------------------------------------------
         sound_sprite_button = new Sprite(new Texture("sound_up.png"));
