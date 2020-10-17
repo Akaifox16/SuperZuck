@@ -110,7 +110,7 @@ public class GameBoard {
             flour.convert();
         }
     }
-    public void checkPolice(Control game){
+    public void checkPolice(Control game) throws InterruptedException {
         for (Police police:polices) {
             GameObject left = leftObject(police);
             GameObject right = rightObject(police);
@@ -140,7 +140,9 @@ public class GameBoard {
                             right.getType()== GameObjectType.Thumnaz ||
                             upper.getType()== GameObjectType.Thumnaz ||
                             lower.getType()== GameObjectType.Thumnaz){
-                        game.setCurrentState(GameState.GameOver);
+                        toNull(getThumnaz());
+                        game.toGameOver(police);
+                        break;
                     }
                 case Sleep:
                     if(police.getBribeCoolDown() > 0)

@@ -62,7 +62,11 @@ public class SuperZuckGame extends BasicGame {
                         }
                         break;
                     case Police_Check:
-                        game.gameBoard().checkPolice(game);
+                        try {
+                            game.gameBoard().checkPolice(game);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     case Bribe_CD:
                         game.nextPhase();
                 }
@@ -138,8 +142,8 @@ public class SuperZuckGame extends BasicGame {
         if (Gdx.input.isTouched()) {
             if (Gdx.input.getX() > play_sprite_button.getX() && Gdx.input.getX() < play_sprite_button.getX() + play_sprite_button.getWidth()) {
                 if (Gdx.input.getY() > play_sprite_button.getY() && Gdx.input.getY() < play_sprite_button.getY() + play_sprite_button.getHeight()) {
-                    game.restartState();
                     game.setCurrentState(GameState.Stage1);
+                    game.restartState();
                 }
             }
         }
