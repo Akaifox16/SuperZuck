@@ -6,10 +6,8 @@ import CPE200.proj.succ.model.GameObjectFactory;
 import CPE200.proj.succ.model.GameObjectType;
 import CPE200.proj.succ.model.GameState;
 import CPE200.proj.succ.model.item.Flour;
+import CPE200.proj.succ.model.movable.Bomb;
 import CPE200.proj.succ.model.staticObject.Police;
-import CPE200.proj.succ.model.movable.Bribe;
-import CPE200.proj.succ.model.movable.ThumnaZ;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +19,7 @@ public class GameBoard {
     private List<GameObject> inventory;
     private List<Police> polices;
     private List<Flour> flours;
+    private List<Bomb> bombs;
     private int thumnazX , thumnazY; // index of main character
     private GameObjectFactory factory;
 
@@ -35,13 +34,20 @@ public class GameBoard {
 
     //convert object to specific type
     public void toNull(GameObject gameObject){
-        board[gameObject.row()][gameObject.column()] = new GameObject(gameObject.row(),gameObject.column());
+        addToBoard(gameObject.row(), gameObject.column(), GameObjectType.NULL);
     }
     public void toThumnaZ(GameObject gameObject){
-        board[gameObject.row()][gameObject.column()] = new ThumnaZ(gameObject.row(),gameObject.column());
+        addToBoard(gameObject.row(), gameObject.column(),GameObjectType.Thumnaz);
     }
     public void toBribe(GameObject gameObject){
-        board[gameObject.row()][gameObject.column()] = new Bribe(gameObject.row(),gameObject.column());
+        addToBoard(gameObject.row(), gameObject.column(), GameObjectType.Bribe);
+    }
+    public void toBomb(GameObject toBomb , Bomb bomb){
+        Bomb moved = new Bomb(toBomb.row(), toBomb.column(), bomb);
+        board[toBomb.row()][toBomb.column()] = moved;
+        bombs.remove(bomb);
+        bombs.add(moved);
+
     }
 
     //add object to board
@@ -58,6 +64,8 @@ public class GameBoard {
             case Flour:
             case Coke:
                 flours.add((Flour)obj);break;
+            case Bomb:
+                bombs.add((Bomb)obj);break;
         }
 
     }
@@ -87,6 +95,7 @@ public class GameBoard {
     public List<Flour> getFlours() {
         return flours;
     }
+
     //get left,right,upper,lower object
     public GameObject leftObject(GameObject temp){return board(temp.row(), temp.column()-1);}
     public GameObject rightObject(GameObject temp){return board(temp.row(),temp.column()+1);}
@@ -117,6 +126,35 @@ public class GameBoard {
         }
     }
 
+    public void checkBomb(Control game){
+        List<Bomb> Btoom = new ArrayList<Bomb>();
+        for (Bomb bomb:bombs) {
+            if(bomb.isEnable()){
+                GameObject left = leftObject(bomb);
+                GameObject right = rightObject(bomb);
+                GameObject upper = upperObject(bomb);
+                GameObject lower = lowerObject(bomb);
+                if(bomb.getDelay() == 0) {
+                    if (left.getType() == GameObjectType.Thumnaz ||
+                            right.getType() == GameObjectType.Thumnaz ||
+                            upper.getType() == GameObjectType.Thumnaz ||
+                            lower.getType() == GameObjectType.Thumnaz) {
+                        game.toGameOver();
+                    } else {
+                        if (left.getType() == GameObjectType.Police) toNull(left);
+                        if (right.getType() == GameObjectType.Police) toNull(right);
+                        if (upper.getType() == GameObjectType.Police) toNull(upper);
+                        if (lower.getType() == GameObjectType.Police) toNull(lower);
+                    }
+                    Btoom.add(bomb);
+                    Bomb.Boom(game,bomb);
+                }else{
+                    bomb.countdown();
+                }
+            }
+        }
+        bombs.removeAll(Btoom);
+    }
     public void checkPolice(Control game) {
         for (Police police:polices) {
             GameObject left = leftObject(police);
@@ -148,7 +186,8 @@ public class GameBoard {
                             upper.getType()== GameObjectType.Thumnaz ||
                             lower.getType()== GameObjectType.Thumnaz){
                         toNull(getThumnaz());
-                        game.toGameOver(police);
+                        police.caught();
+                        game.toGameOver();
                         break;
                     }
                 case Sleep:
@@ -161,7 +200,7 @@ public class GameBoard {
                         lower.getType() == GameObjectType.Thumnaz){
                             police.suspect();
                         }
-                    }
+                    }break;
             }
         }
     }
@@ -198,6 +237,7 @@ public class GameBoard {
         this.inventory = new ArrayList<GameObject>();
         this.flours = new ArrayList<Flour>();
         this.polices = new ArrayList<Police>();
+        this.bombs = new ArrayList<Bomb>();
     }
     //new gameboard method
     public GameBoard newBoard(GameState state){
@@ -327,6 +367,9 @@ public class GameBoard {
     //need fixed
     public void Stage2(){
         this.fillWall();
+        addToBoard(2,3,GameObjectType.Thumnaz);
+        addToBoard(5,3,GameObjectType.Bomb);
+        addToBoard(6,3,GameObjectType.Police);
     }
     public void Stage3(){
         this.fillWall();

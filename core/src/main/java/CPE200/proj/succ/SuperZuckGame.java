@@ -30,7 +30,7 @@ public class SuperZuckGame extends BasicGame {
         boardOffsetY = 50;
         game = new Control();
         sound = Gdx.audio.newSound(Gdx.files.internal("song.mp3"));
-        sound.play(0.5f);
+        sound.play(0.12f);
         //------------------------------Sprite-----------------------------------------------------
         play_sprite_button = new Sprite(new Texture("re.png"));
         play_sprite_button.setPosition(width/2-125,height/2-(float)37.5+100);
@@ -64,6 +64,7 @@ public class SuperZuckGame extends BasicGame {
                     case Police_Check:
                         game.gameBoard().checkPolice(game);
                     case Object_Cool_down:
+                        game.gameBoard().checkBomb(game);
                         game.nextPhase();
                 }
         }
@@ -119,6 +120,7 @@ public class SuperZuckGame extends BasicGame {
                     case Wall:
                     case Bribe:
                     case Coke:
+                    case Bomb:
                     case Converter:
                         g.drawTexture(current.getTexture(),renderX,renderY);
                         break;
@@ -138,7 +140,7 @@ public class SuperZuckGame extends BasicGame {
         if (Gdx.input.isTouched()) {
             if (Gdx.input.getX() > play_sprite_button.getX() && Gdx.input.getX() < play_sprite_button.getX() + play_sprite_button.getWidth()) {
                 if (Gdx.input.getY() > play_sprite_button.getY() && Gdx.input.getY() < play_sprite_button.getY() + play_sprite_button.getHeight()) {
-                    game.setCurrentState(GameState.Stage1);
+                    game.setCurrentState(GameState.Stage2);
                     game.restartState();
                 }
             }
@@ -156,7 +158,7 @@ public class SuperZuckGame extends BasicGame {
                         sound_sprite_button.setTexture(new Texture("mute.png"));
                     }
                     else {
-                        sound.play(0.5f);
+                        sound.play(0.12f);
                         soundcheck = true;
                         sound_sprite_button.setTexture(new Texture("sound_up.png"));
                     }
@@ -175,7 +177,7 @@ public class SuperZuckGame extends BasicGame {
         if (Gdx.input.justTouched()){
             game.setCurrentState(GameState.MainMenu);
             //game.restartState();
-            sound.play();
+            //sound.play();
         }
     }
 

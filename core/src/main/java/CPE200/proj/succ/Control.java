@@ -5,6 +5,7 @@ import CPE200.proj.succ.model.GameObjectType;
 import CPE200.proj.succ.model.GameState;
 import CPE200.proj.succ.model.TurnState;
 import CPE200.proj.succ.model.board.GameBoard;
+import CPE200.proj.succ.model.movable.Bomb;
 import CPE200.proj.succ.model.staticObject.Police;
 
 
@@ -64,8 +65,16 @@ public class Control {
     public void manageNextObject(GameObject obj , GameObject nextObj){
         switch (obj.getType()){
             case Bribe:
-                gameBoard.toBribe(nextObj);
-                moveThumnaz(obj);
+                if(nextObj.getType() == GameObjectType.NULL) {
+                    gameBoard.toBribe(nextObj);
+                    moveThumnaz(obj);
+                }
+                break;
+            case Bomb:
+                if(nextObj.getType() == GameObjectType.NULL) {
+                    gameBoard.toBomb(nextObj,(Bomb)obj);
+                    moveThumnaz(obj);
+                }
                 break;
             case Coke:
                 setCurrentState(GameState.GameOver);break;
@@ -91,6 +100,7 @@ public class Control {
             case Converter:
                 gameBoard.convertFlours();
                 moveThumnaz(obj);
+                break;
         }
     }
 
@@ -148,8 +158,7 @@ public class Control {
         }
     }
 
-    public void toGameOver(Police p){
-        p.caught();
+    public void toGameOver(){
         setCurrentState(GameState.GameOver);
     }
 }

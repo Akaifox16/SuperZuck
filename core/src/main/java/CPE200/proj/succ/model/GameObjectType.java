@@ -10,7 +10,7 @@ public enum GameObjectType {
     Key,
     Police,
     Thumnaz,
-    Gunner,
+    Bomb,
     Wall,
     NULL
 }
