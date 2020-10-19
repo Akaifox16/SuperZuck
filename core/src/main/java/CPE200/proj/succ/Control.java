@@ -116,8 +116,8 @@ public class Control {
             manageNextObject(rightTile,gameBoard.rightObject(rightTile));
             nextPhase();
         }
-
     }
+
     public void moveLeft(){
         GameObject leftTile = gameBoard.board(gameBoard.getThumnazX(), gameBoard.getThumnazY()-1);
         if(leftTile.getType() == GameObjectType.NULL){
@@ -131,6 +131,7 @@ public class Control {
             nextPhase();
         }
     }
+
     public void moveUp(){
         GameObject upTile = gameBoard.board(gameBoard.getThumnazX()-1, gameBoard.getThumnazY());
         if(upTile.getType() == GameObjectType.NULL){

@@ -1,6 +1,7 @@
 package CPE200.proj.succ;
 
 import CPE200.proj.succ.model.GameObject;
+import CPE200.proj.succ.model.GameObjectType;
 import CPE200.proj.succ.model.GameState;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -110,24 +111,7 @@ public class SuperZuckGame extends BasicGame {
                 int renderY = boardOffsetY + (x * gridSize);
 
                 GameObject current = game.gameBoard().board(x,y);
-                switch (current.getType()) {
-                    case Thumnaz:
-                    case Key:
-                    case StageDoor:
-                    case Door:
-                    case Flour:
-                    case Police:
-                    case Wall:
-                    case Bribe:
-                    case Coke:
-                    case Bomb:
-                    case Converter:
-                        g.drawTexture(current.getTexture(),renderX,renderY);
-                        break;
-                    case NULL:
-                    default:
-                        break;
-                }
+                if(current.getType() != GameObjectType.NULL) g.drawTexture(current.getTexture(),renderX,renderY);
             }
         }
     }
