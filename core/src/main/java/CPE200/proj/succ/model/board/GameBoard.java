@@ -102,7 +102,7 @@ public class GameBoard {
     public GameObject upperObject(GameObject temp){return board(temp.row()-1,temp.column());}
     public GameObject lowerObject(GameObject temp){return board(temp.row()+1,temp.column());}
 
-    public boolean canNext(GameObject obj, GameObject next){
+    private boolean canNext(GameObject obj, GameObject next){
         if(obj.getType() == GameObjectType.Door || obj.getType() == GameObjectType.StageDoor) return true;
         return  obj.pickable() || (obj.movable()  && next.getType() == GameObjectType.NULL) || (obj.movable() && next.pickable());
     }
@@ -127,37 +127,23 @@ public class GameBoard {
         }
     }
 
+    private void checkBombAdjacent(Control game , List<Bomb> btoom , Bomb bomb , GameObject obj){
+        if(bomb.check(leftObject(bomb))){
+            switch (obj.getType()){
+                case Thumnaz:game.toGameOver();break;
+                case Police: toNull(obj);
+                    btoom.add(bomb);break;
+            }
+        }
+    }
+
     public void checkBomb(Control game){
         List<Bomb> Btoom = new ArrayList<Bomb>();
         for (Bomb bomb:bombs) {
-            if(bomb.check(leftObject(bomb))){
-
-            }
-
-
-            if(bomb.isEnable()){
-                GameObject left = leftObject(bomb);
-                GameObject right = rightObject(bomb);
-                GameObject upper = upperObject(bomb);
-                GameObject lower = lowerObject(bomb);
-                if(bomb.getDelay() == 0) {
-                    if (left.getType() == GameObjectType.Thumnaz ||
-                            right.getType() == GameObjectType.Thumnaz ||
-                            upper.getType() == GameObjectType.Thumnaz ||
-                            lower.getType() == GameObjectType.Thumnaz) {
-                        game.toGameOver();
-                    } else {
-                        if (left.getType() == GameObjectType.Police) toNull(left);
-                        if (right.getType() == GameObjectType.Police) toNull(right);
-                        if (upper.getType() == GameObjectType.Police) toNull(upper);
-                        if (lower.getType() == GameObjectType.Police) toNull(lower);
-                    }
-                    Btoom.add(bomb);
-                    Bomb.Boom(this,bomb);
-                }else{
-                    bomb.countdown();
-                }
-            }
+            checkBombAdjacent(game,Btoom,bomb,leftObject(bomb));
+            checkBombAdjacent(game,Btoom,bomb,rightObject(bomb));
+            checkBombAdjacent(game,Btoom,bomb,upperObject(bomb));
+            checkBombAdjacent(game,Btoom,bomb,lowerObject(bomb));
         }
         bombs.removeAll(Btoom);
     }
@@ -199,7 +185,7 @@ public class GameBoard {
                     }
                 case Sleep:
                     if(police.getBribeCoolDown() > 0)
-                        police.setBribeCoolDown(police.getBribeCoolDown() - 1);
+                        police.countdown();
                     else {
                         if(left.getType() == GameObjectType.Thumnaz ||
                         right.getType() == GameObjectType.Thumnaz ||

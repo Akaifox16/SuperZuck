@@ -8,12 +8,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.Timer;
 import org.mini2Dx.core.game.BasicGame;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.Sprite;
 
-import java.util.concurrent.TimeUnit;
 
 public class SuperZuckGame extends BasicGame {
 	public static final String GAME_IDENTIFIER = "CPE200.proj.succ";
@@ -71,14 +69,14 @@ public class SuperZuckGame extends BasicGame {
                     case Object_Cool_down:
                         game.gameBoard().checkBomb(game);
                         game.nextPhase();
-                }
-           /* case GameOver:
+                }break;
+            case GameOver:
                 if (Gdx.input.justTouched()){
                     game.setCurrentState(GameState.MainMenu);
                     //game.restartState();
                     sound.play();
                 }
-                break;*/
+                break;
         }
     }
     

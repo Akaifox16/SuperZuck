@@ -11,7 +11,7 @@ public class Police extends GameObject {
     private int bribeCoolDown;
 
     public void bribed(){
-        setBribeCoolDown(35);
+        bribeCoolDown = 35;
         state = PoliceState.Sleep;
         texture = new Texture("Police/police.png");
     }
@@ -19,11 +19,11 @@ public class Police extends GameObject {
         this.state = PoliceState.Caught;
         this.texture = new Texture("Police/custody.png");
     }
-
-    public void setBribeCoolDown(int bribeCoolDown) {
-        this.bribeCoolDown = bribeCoolDown;
-    }
     public void suspect(){this.state = PoliceState.Suspect;this.texture = new Texture("Police/alertpolice.png");}
+    public void countdown(){
+        this.bribeCoolDown--;
+    }
+
 
     public PoliceState getState() {
         return state;
