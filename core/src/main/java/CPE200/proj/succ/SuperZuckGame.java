@@ -8,9 +8,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Timer;
 import org.mini2Dx.core.game.BasicGame;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.Sprite;
+
+import java.util.concurrent.TimeUnit;
 
 public class SuperZuckGame extends BasicGame {
 	public static final String GAME_IDENTIFIER = "CPE200.proj.succ";
@@ -23,6 +26,7 @@ public class SuperZuckGame extends BasicGame {
 	private Sprite sound_sprite_button;
 	private Sprite play_sprite_button;
 	private Sprite restartState;
+	private long checkdelay = System.nanoTime()/1000000000;
 
 	@Override
     public void initialise() {
@@ -68,6 +72,13 @@ public class SuperZuckGame extends BasicGame {
                         game.gameBoard().checkBomb(game);
                         game.nextPhase();
                 }
+           /* case GameOver:
+                if (Gdx.input.justTouched()){
+                    game.setCurrentState(GameState.MainMenu);
+                    //game.restartState();
+                    sound.play();
+                }
+                break;*/
         }
     }
     
@@ -121,10 +132,10 @@ public class SuperZuckGame extends BasicGame {
         g.drawTexture(new Texture("bg.jpg"), 0, 0);
         g.drawTexture(new Texture("Full_Flour_Alchemist.png"), (width / 3), height / 7 - 100);
         g.drawSprite(play_sprite_button);
-        if (Gdx.input.isTouched()) {
+        if (Gdx.input.justTouched()) {
             if (Gdx.input.getX() > play_sprite_button.getX() && Gdx.input.getX() < play_sprite_button.getX() + play_sprite_button.getWidth()) {
                 if (Gdx.input.getY() > play_sprite_button.getY() && Gdx.input.getY() < play_sprite_button.getY() + play_sprite_button.getHeight()) {
-                    game.setCurrentState(GameState.Stage2);
+                    game.setCurrentState(GameState.Stage1);
                     game.restartState();
                 }
             }
@@ -154,14 +165,12 @@ public class SuperZuckGame extends BasicGame {
     }
 
     public void renderEndscreen(Graphics g){
-	    g.setBackgroundColor(Color.BLACK);
-	    g.drawTexture(new Texture("end bg.jpg"),0,0);
+	    g.setBackgroundColor(Color.GRAY);
+	    renderBoard(g);
 	    sound.pause();
 	   //g.drawTexture(new Texture("Full Flour Alchemist (1).png"),width/2-250,height/2-250);
-        if (Gdx.input.justTouched()){
-            game.setCurrentState(GameState.MainMenu);
-            //game.restartState();
-            //sound.play();
+        if (System.nanoTime()/1000000000 - checkdelay > 10){
+            g.drawTexture(new Texture("end bg.jpg"),0,0);
         }
     }
 
@@ -180,7 +189,7 @@ public class SuperZuckGame extends BasicGame {
 	    g.drawTexture(new Texture("complete_bg.jpg"),0,0);
 	    g.drawTexture(new Texture("complete_spare_new.png"),width/2-300,height/6);
 	    if (Gdx.input.justTouched()){
-            game.setCurrentState(GameState.Stage1);
+            game.setCurrentState(GameState.MainMenu);
             game.restartState();
         }
     }
