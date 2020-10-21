@@ -105,7 +105,7 @@ public class Control {
     }
 
     public void moveRight(){
-        GameObject rightTile = gameBoard.board(gameBoard.getThumnazX(), gameBoard.getThumnazY()+1);
+        GameObject rightTile = gameBoard().rightObject(gameBoard.getThumnaz());
         if(rightTile.getType() == GameObjectType.NULL){
             GameObject toSpace = gameBoard.getThumnaz();
             gameBoard.toNull(toSpace);
@@ -119,7 +119,7 @@ public class Control {
     }
 
     public void moveLeft(){
-        GameObject leftTile = gameBoard.board(gameBoard.getThumnazX(), gameBoard.getThumnazY()-1);
+        GameObject leftTile = gameBoard().leftObject(gameBoard.getThumnaz());
         if(leftTile.getType() == GameObjectType.NULL){
             GameObject toSpace = gameBoard.getThumnaz();
             gameBoard.toNull(toSpace);
@@ -133,7 +133,7 @@ public class Control {
     }
 
     public void moveUp(){
-        GameObject upTile = gameBoard.board(gameBoard.getThumnazX()-1, gameBoard.getThumnazY());
+        GameObject upTile = gameBoard.upperObject(gameBoard.getThumnaz());
         if(upTile.getType() == GameObjectType.NULL){
             GameObject toSpace = gameBoard.getThumnaz();
             gameBoard.toNull(toSpace);
@@ -146,7 +146,7 @@ public class Control {
         }
     }
     public void moveDown(){
-        GameObject downTile = gameBoard.board(gameBoard.getThumnazX()+1, gameBoard.getThumnazY());
+        GameObject downTile = gameBoard().lowerObject(gameBoard.getThumnaz());
         if(downTile.getType() == GameObjectType.NULL){
             GameObject toSpace = gameBoard.getThumnaz();
             gameBoard.toNull(toSpace);

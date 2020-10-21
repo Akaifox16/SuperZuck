@@ -7,6 +7,7 @@ import CPE200.proj.succ.model.GameObjectType;
 import CPE200.proj.succ.model.GameState;
 import CPE200.proj.succ.model.item.Flour;
 import CPE200.proj.succ.model.movable.Bomb;
+import CPE200.proj.succ.model.movable.ThumnaZ;
 import CPE200.proj.succ.model.staticObject.Police;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +21,11 @@ public class GameBoard {
     private List<Police> polices;
     private List<Flour> flours;
     private List<Bomb> bombs;
-    private int thumnazX , thumnazY; // index of main character
+    private ThumnaZ thumnaz;
     private GameObjectFactory factory;
 
     //setters
-    public void setThumnaz(int x , int y){setThumnazX(x);setThumnazY(y);}
-    public void setThumnazX(int thumnazX) {
-        this.thumnazX = thumnazX;
-    }
-    public void setThumnazY(int thumnazY) {
-        this.thumnazY = thumnazY;
-    }
+    public void setThumnaz(int x , int y){thumnaz.setCoordinate(x,y);}
 
     //convert object to specific type
     public void toNull(GameObject gameObject){
@@ -56,8 +51,7 @@ public class GameBoard {
         board[i][j] = obj;
         switch (type){
             case Thumnaz:
-                this.thumnazX = i;
-                this.thumnazY = j;
+                thumnaz = (ThumnaZ) obj;
                 break;
             case Police:
                 polices.add((Police) obj);break;
@@ -72,7 +66,8 @@ public class GameBoard {
 
     // getters
     public GameObject board(int i , int j){
-        return  board[i][j];
+        if(i >= 0 && i < ROW  && j >= 0 && j < COLUMN) return  board[i][j];
+        return null;
     }
     public int getRow() {
         return ROW;
@@ -80,14 +75,14 @@ public class GameBoard {
     public int getColumn() {
         return COLUMN;
     }
-    public int getThumnazX() {
+    /*public int getThumnazX() {
         return thumnazX;
     }
     public int getThumnazY() {
         return thumnazY;
-    }
+    }*/
     public GameObject getThumnaz(){
-        return  board(thumnazX,thumnazY);
+        return  thumnaz;
     }
     public List<GameObject> getInventory() {
         return inventory;
@@ -104,7 +99,7 @@ public class GameBoard {
 
     private boolean canNext(GameObject obj, GameObject next){
         if(obj.getType() == GameObjectType.Door || obj.getType() == GameObjectType.StageDoor) return true;
-        return  obj.pickable() || (obj.movable()  && next.getType() == GameObjectType.NULL) || (obj.movable() && next.pickable());
+        return  obj.pickable() || (obj.movable() && (next.getType() == GameObjectType.NULL || next.pickable() ));
     }
     // check if object can go left,right,up,down
     public boolean canLeft(GameObject left){
@@ -148,8 +143,50 @@ public class GameBoard {
         bombs.removeAll(Btoom);
     }
 
+    private boolean managePoliceAdjacent(Control game , Police police , GameObjectType type){
+        /*switch (adjacent.getType()){
+            case Bribe:
+                toNull(adjacent);
+                police.bribed();break;
+            case Thumnaz:
+                toNull(getThumnaz());
+                police.caught();
+                game.toGameOver();
+                break;
+        }*/
+        return false;
+    }
+
     public void checkPolice(Control game) {
         for (Police police:polices) {
+        /*    switch (police.getState()){
+                case Suspect:
+                    if(!managePoliceAdjacent(game,police,GameObjectType.Bribe)){
+                        managePoliceAdjacent(game,police,GameObjectType.Thumnaz);
+                    }
+                case Sleep:
+                    if(police.getBribeCoolDown() > 0)
+                        police.countdown();
+                    else {
+                        if(left.getType() == GameObjectType.Thumnaz ||
+                                right.getType() == GameObjectType.Thumnaz ||
+                                upper.getType() == GameObjectType.Thumnaz ||
+                                lower.getType() == GameObjectType.Thumnaz){
+                            police.suspect();
+                        }
+                    }break;
+
+            }*/
+           /* if(police.check(leftObject(police))){
+                managePoliceAdjacent(game,police,leftObject(police));
+            }else if(police.check(rightObject(police))){
+                managePoliceAdjacent(game,police,rightObject(police));
+            }else if(police.check(lowerObject(police))){
+                managePoliceAdjacent(game,police,lowerObject(police));
+            }else if(police.check(upperObject(police))){
+                managePoliceAdjacent(game,police,upperObject(police));
+            }*/
+
             GameObject left = leftObject(police);
             GameObject right = rightObject(police);
             GameObject upper = upperObject(police);
@@ -178,7 +215,7 @@ public class GameBoard {
                             right.getType()== GameObjectType.Thumnaz ||
                             upper.getType()== GameObjectType.Thumnaz ||
                             lower.getType()== GameObjectType.Thumnaz){
-                        toNull(getThumnaz());
+                        toNull(thumnaz);
                         police.caught();
                         game.toGameOver();
                         break;

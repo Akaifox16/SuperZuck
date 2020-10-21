@@ -24,6 +24,22 @@ public class Police extends GameObject {
         this.bribeCoolDown--;
     }
 
+    public boolean check(GameObject obj){
+        /*switch (getState()) {
+            case Suspect:
+                if(obj.getType() == GameObjectType.Bribe || obj.getType() == GameObjectType.Thumnaz) return true;
+            case Sleep:
+                if(bribeCoolDown > 0)
+                    countdown();
+                else {
+                    if(obj.getType() == GameObjectType.Thumnaz){
+                        suspect();
+                    }
+                }
+                return false;
+        }*/
+        return false;
+    }
 
     public PoliceState getState() {
         return state;

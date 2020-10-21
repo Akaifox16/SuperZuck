@@ -24,7 +24,7 @@ public class SuperZuckGame extends BasicGame {
 	private Sprite sound_sprite_button;
 	private Sprite play_sprite_button;
 	private Sprite restartState;
-	private long checkdelay = System.nanoTime()/1000000000;
+	private long checkdelay = 0;
 
 	@Override
     public void initialise() {
@@ -34,6 +34,7 @@ public class SuperZuckGame extends BasicGame {
         game = new Control();
         sound = Gdx.audio.newSound(Gdx.files.internal("song.mp3"));
         sound.play(0.12f);
+        checkdelay = System.nanoTime()/1000000000;
         //------------------------------Sprite-----------------------------------------------------
         play_sprite_button = new Sprite(new Texture("re.png"));
         play_sprite_button.setPosition(width/2-125,height/2-(float)37.5+100);
