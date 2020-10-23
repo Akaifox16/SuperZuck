@@ -17,7 +17,7 @@ public class Control {
 
 
     public Control(){
-        gameBoard = new GameBoard(12,18);
+        gameBoard = new GameBoard(11,18);
         gameBoard = gameBoard.newBoard(GameState.Stage1);
     }
 

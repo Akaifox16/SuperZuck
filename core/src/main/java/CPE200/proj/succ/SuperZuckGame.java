@@ -18,7 +18,6 @@ public class SuperZuckGame extends BasicGame {
     private Control game;
     private int gridSize;
     private int boardOffsetX, boardOffsetY;
-	private Texture BackGround;
 	private Sound sound;
 	private boolean soundcheck = true;
 	private Sprite sound_sprite_button;
@@ -49,13 +48,22 @@ public class SuperZuckGame extends BasicGame {
     @Override
     public void update(float delta) {
         switch (game.getCurrentState()) {
+            case MainMenu:
+                if (Gdx.input.justTouched()) {
+                    if (Gdx.input.getX() > play_sprite_button.getX() && Gdx.input.getX() < play_sprite_button.getX() + play_sprite_button.getWidth()) {
+                        if (Gdx.input.getY() > play_sprite_button.getY() && Gdx.input.getY() < play_sprite_button.getY() + play_sprite_button.getHeight()) {
+                            game.setCurrentState(GameState.Stage1);
+                            game.restartState();
+                        }
+                    }
+                }break;
             case Stage1: case Stage2:case Stage3:case Stage4:case Stage5:
                 switch (game.getCurrentPhase()) {
                     case Player_Move:
                         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
                             game.moveRight();
                         }
-                        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+                        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT))  {
                             game.moveLeft();
                         }
                         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
@@ -64,20 +72,33 @@ public class SuperZuckGame extends BasicGame {
                         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
                             game.moveDown();
                         }
+                        checkdelay = System.nanoTime()/1000000000;
                         break;
                     case Police_Check:
                         game.gameBoard().checkPolice(game);
                     case Object_Cool_down:
                         game.gameBoard().checkBomb(game);
                         game.nextPhase();
+                }
+                if (Gdx.input.justTouched()) {
+                    if (Gdx.input.getX() > restartState.getX() && Gdx.input.getX() < restartState.getX() + restartState.getWidth()) {
+                        if (Gdx.input.getY() > restartState.getY() && Gdx.input.getY() < restartState.getY() + restartState.getHeight()) {
+                            game.restartState();
+                        }
+                    }
                 }break;
             case GameOver:
-                if (Gdx.input.justTouched()){
+                if (Gdx.input.justTouched() && System.nanoTime()/1000000000 - checkdelay > 5){
                     game.setCurrentState(GameState.MainMenu);
                     //game.restartState();
-                    sound.play();
+                    sound.play(0.12f);
                 }
                 break;
+            case GameClear:
+                if (Gdx.input.justTouched()){
+                    game.setCurrentState(GameState.MainMenu);
+                    game.restartState();
+                }break;
         }
     }
     
@@ -131,14 +152,6 @@ public class SuperZuckGame extends BasicGame {
         g.drawTexture(new Texture("bg.jpg"), 0, 0);
         g.drawTexture(new Texture("Full_Flour_Alchemist.png"), (width / 3), height / 7 - 100);
         g.drawSprite(play_sprite_button);
-        if (Gdx.input.justTouched()) {
-            if (Gdx.input.getX() > play_sprite_button.getX() && Gdx.input.getX() < play_sprite_button.getX() + play_sprite_button.getWidth()) {
-                if (Gdx.input.getY() > play_sprite_button.getY() && Gdx.input.getY() < play_sprite_button.getY() + play_sprite_button.getHeight()) {
-                    game.setCurrentState(GameState.Stage1);
-                    game.restartState();
-                }
-            }
-        }
     }
 
     public void renderMusic(Graphics g){
@@ -168,28 +181,17 @@ public class SuperZuckGame extends BasicGame {
 	    renderBoard(g);
 	    sound.pause();
 	   //g.drawTexture(new Texture("Full Flour Alchemist (1).png"),width/2-250,height/2-250);
-        if (System.nanoTime()/1000000000 - checkdelay > 10){
+        if (System.nanoTime()/1000000000 - checkdelay > 5){
             g.drawTexture(new Texture("end bg.jpg"),0,0);
         }
     }
 
     public void renderRestartstate (Graphics g){
 	    g.drawSprite(restartState);
-        if (Gdx.input.justTouched()) {
-            if (Gdx.input.getX() > restartState.getX() && Gdx.input.getX() < restartState.getX() + restartState.getWidth()) {
-                if (Gdx.input.getY() > restartState.getY() && Gdx.input.getY() < restartState.getY() + restartState.getHeight()) {
-                    game.restartState();
-                }
-            }
-        }
     }
 
     public void renderClear (Graphics g){
 	    g.drawTexture(new Texture("complete_bg.jpg"),0,0);
 	    g.drawTexture(new Texture("complete_spare_new.png"),width/2-300,height/6);
-	    if (Gdx.input.justTouched()){
-            game.setCurrentState(GameState.MainMenu);
-            game.restartState();
-        }
     }
 }
