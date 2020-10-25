@@ -7,10 +7,10 @@ import CPE200.proj.succ.model.TurnState;
 import CPE200.proj.succ.model.board.GameBoard;
 import CPE200.proj.succ.model.movable.Bomb;
 import CPE200.proj.succ.model.staticObject.Police;
+import com.badlogic.gdx.audio.Music;
 
 
 public class Control {
-
     private GameBoard gameBoard; // กระดานของตัวเกม
     private GameState currentState = GameState.MainMenu; // stage ปัจจุบันของตัวเกม
     private TurnState currentPhase = TurnState.Player_Move;// turn phase ปัจจุบัน
@@ -49,17 +49,22 @@ public class Control {
     }
 
     public void nextStage(){
-        switch (currentState){
+        switch (currentState) {
             case Stage1:
-                this.currentState = GameState.Stage2;break;
+                this.currentState = GameState.Stage2;
+                break;
             case Stage2:
-                this.currentState = GameState.Stage3;break;
+                this.currentState = GameState.Stage3;
+                break;
             case Stage3:
-                this.currentState = GameState.Stage4;break;
+                this.currentState = GameState.Stage4;
+                break;
             case Stage4:
-                this.currentState = GameState.Stage5;break;
+                this.currentState = GameState.Stage5;
+                break;
             case Stage5:
-                this.currentState = GameState.GameClear;break;
+                this.currentState = GameState.GameClear;
+                break;
         }
     }
     public void manageNextObject(GameObject obj , GameObject nextObj){
@@ -104,59 +109,36 @@ public class Control {
         }
     }
 
-    public void moveRight(){
-        GameObject rightTile = gameBoard().rightObject(gameBoard.getThumnaz());
-        if(rightTile.getType() == GameObjectType.NULL){
+    private void move(GameObject current , GameObject next , boolean canNext){
+        if(current.getType() == GameObjectType.NULL){
             GameObject toSpace = gameBoard.getThumnaz();
             gameBoard.toNull(toSpace);
-            gameBoard.toThumnaZ(rightTile);
-            gameBoard.setThumnaz(rightTile.row(),rightTile.column());
+            gameBoard.toThumnaZ(current);
+            gameBoard.setThumnaz(current.row(),current.column());
             nextPhase();
-        }else if(gameBoard().canRight(rightTile)){
-            manageNextObject(rightTile,gameBoard.rightObject(rightTile));
+        }else if(canNext){
+            manageNextObject(current,next);
             nextPhase();
         }
+    }
+
+    public void moveRight(){
+        GameObject rightTile = gameBoard().rightObject(gameBoard.getThumnaz());
+        move(rightTile,gameBoard.rightObject(rightTile),gameBoard.canRight(rightTile));
     }
 
     public void moveLeft(){
         GameObject leftTile = gameBoard().leftObject(gameBoard.getThumnaz());
-        if(leftTile.getType() == GameObjectType.NULL){
-            GameObject toSpace = gameBoard.getThumnaz();
-            gameBoard.toNull(toSpace);
-            gameBoard.toThumnaZ(leftTile);
-            gameBoard.setThumnaz(leftTile.row(),leftTile.column());
-            nextPhase();
-        }else if(gameBoard.canLeft(leftTile)){
-            manageNextObject(leftTile,gameBoard.leftObject(leftTile));
-            nextPhase();
-        }
+        move(leftTile,gameBoard.leftObject(leftTile),gameBoard.canLeft(leftTile));
     }
 
     public void moveUp(){
         GameObject upTile = gameBoard.upperObject(gameBoard.getThumnaz());
-        if(upTile.getType() == GameObjectType.NULL){
-            GameObject toSpace = gameBoard.getThumnaz();
-            gameBoard.toNull(toSpace);
-            gameBoard.toThumnaZ(upTile);
-            gameBoard.setThumnaz(upTile.row(),upTile.column());
-            nextPhase();
-        }else if(gameBoard().canUp(upTile)){
-            manageNextObject(upTile,gameBoard.upperObject(upTile));
-            nextPhase();
-        }
+        move(upTile,gameBoard.upperObject(upTile), gameBoard().canUp(upTile));
     }
     public void moveDown(){
         GameObject downTile = gameBoard().lowerObject(gameBoard.getThumnaz());
-        if(downTile.getType() == GameObjectType.NULL){
-            GameObject toSpace = gameBoard.getThumnaz();
-            gameBoard.toNull(toSpace);
-            gameBoard.toThumnaZ(downTile);
-            gameBoard.setThumnaz(downTile.row(),downTile.column());
-            nextPhase();
-        }else if(gameBoard().canDown(downTile)){
-            manageNextObject(downTile,gameBoard.lowerObject(downTile));
-            nextPhase();
-        }
+        move(downTile, gameBoard().lowerObject(downTile), gameBoard().canDown(downTile));
     }
 
     public void toGameOver(){

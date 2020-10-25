@@ -242,7 +242,7 @@ public class GameBoard {
     public GameBoard newBoard(GameState state){
         GameBoard newBoard =  new GameBoard(12,18);
         switch (state){
-            case Stage1: newBoard.jsonReader("Map/Stage5.json");;break;
+            case Stage1: newBoard.jsonReader("Map/Stage1.json");;break;
             case Stage2: newBoard.jsonReader("Map/Stage2.json");;break;
             case Stage3: newBoard.jsonReader("Map/Stage3.json");;break;
             case Stage4: newBoard.jsonReader("Map/Stage4.json");;break;

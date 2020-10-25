@@ -15,11 +15,12 @@ import org.mini2Dx.core.graphics.Sprite;
 
 public class SuperZuckGame extends BasicGame {
 	public static final String GAME_IDENTIFIER = "CPE200.proj.succ";
+	private static final float volume = 0.12f;
     private Control game;
     private int gridSize;
     private int boardOffsetX, boardOffsetY;
-	private Sound sound;
-	private boolean soundcheck = true;
+	private Sound music;
+	private boolean soundOn = true;
 	private Sprite sound_sprite_button;
 	private Sprite play_sprite_button;
 	private Sprite restartState;
@@ -31,8 +32,8 @@ public class SuperZuckGame extends BasicGame {
         boardOffsetX = 50;
         boardOffsetY = 50;
         game = new Control();
-        sound = Gdx.audio.newSound(Gdx.files.internal("song.mp3"));
-        sound.play(0.12f);
+        music = Gdx.audio.newSound(Gdx.files.internal("sound/song.mp3"));
+        music.play(volume);
         checkdelay = System.nanoTime()/1000000000;
         //------------------------------Sprite-----------------------------------------------------
         play_sprite_button = new Sprite(new Texture("re.png"));
@@ -45,18 +46,37 @@ public class SuperZuckGame extends BasicGame {
         restartState.setPosition(width-180,height-250);
     }
     
+    private boolean isSpriteTouch(Sprite button){
+        if (Gdx.input.justTouched()) {
+            if (Gdx.input.getX() > button.getX() && Gdx.input.getX() < button.getX() + button.getWidth()) {
+                return Gdx.input.getY() > button.getY() && Gdx.input.getY() < button.getY() + button.getHeight(); 
+            }
+        }
+        return false;
+    }
+    
     @Override
     public void update(float delta) {
+        if (isSpriteTouch(sound_sprite_button)) {
+            if (soundOn){
+                soundOn = false;
+                music.setVolume(0,0);
+                sound_sprite_button.setTexture(new Texture("mute.png"));
+            }
+            else {
+                music.setVolume(0,volume);
+                soundOn = true;
+                sound_sprite_button.setTexture(new Texture("sound_up.png"));
+            }
+            //  g.drawSprite(sound_sprite_button);
+        }
         switch (game.getCurrentState()) {
             case MainMenu:
-                if (Gdx.input.justTouched()) {
-                    if (Gdx.input.getX() > play_sprite_button.getX() && Gdx.input.getX() < play_sprite_button.getX() + play_sprite_button.getWidth()) {
-                        if (Gdx.input.getY() > play_sprite_button.getY() && Gdx.input.getY() < play_sprite_button.getY() + play_sprite_button.getHeight()) {
+                        if (isSpriteTouch(play_sprite_button)) {
                             game.setCurrentState(GameState.Stage1);
+                            playMusic();
                             game.restartState();
-                        }
-                    }
-                }break;
+                        }break;
             case Stage1: case Stage2:case Stage3:case Stage4:case Stage5:
                 switch (game.getCurrentPhase()) {
                     case Player_Move:
@@ -70,7 +90,7 @@ public class SuperZuckGame extends BasicGame {
                             game.moveUp();
                         }
                         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-                            game.moveDown();
+                            game.moveDown() ;
                         }
                         checkdelay = System.nanoTime()/1000000000;
                         break;
@@ -80,25 +100,19 @@ public class SuperZuckGame extends BasicGame {
                         game.gameBoard().checkBomb(game);
                         game.nextPhase();
                 }
-                if (Gdx.input.justTouched()) {
-                    if (Gdx.input.getX() > restartState.getX() && Gdx.input.getX() < restartState.getX() + restartState.getWidth()) {
-                        if (Gdx.input.getY() > restartState.getY() && Gdx.input.getY() < restartState.getY() + restartState.getHeight()) {
-                            game.restartState();
-                        }
-                    }
-                }break;
-            case GameOver:
-                if (Gdx.input.justTouched() && System.nanoTime()/1000000000 - checkdelay > 5){
-                    game.setCurrentState(GameState.MainMenu);
-                    //game.restartState();
-                    sound.play(0.12f);
+                if (isSpriteTouch(restartState)) {
+                    playMusic();
+                    game.restartState();
                 }
                 break;
+            case GameOver:
             case GameClear:
-                if (Gdx.input.justTouched()){
+                if (Gdx.input.justTouched() && System.nanoTime()/1000000000 - checkdelay > 5){
                     game.setCurrentState(GameState.MainMenu);
-                    game.restartState();
-                }break;
+                    if(soundOn)
+                        music.play(volume);
+                }
+                break;
         }
     }
     
@@ -148,50 +162,54 @@ public class SuperZuckGame extends BasicGame {
     }
 
 
-    public void renderMainmenu (Graphics g) {
+    private void renderMainmenu (Graphics g) {
         g.drawTexture(new Texture("bg.jpg"), 0, 0);
         g.drawTexture(new Texture("Full_Flour_Alchemist.png"), (width / 3), height / 7 - 100);
         g.drawSprite(play_sprite_button);
     }
 
-    public void renderMusic(Graphics g){
+    private void renderMusic(Graphics g){
 	    g.drawSprite(sound_sprite_button);
-        if (Gdx.input.justTouched()) {
-            if (Gdx.input.getX() > sound_sprite_button.getX() && Gdx.input.getX() < sound_sprite_button.getX() + sound_sprite_button.getWidth()) {
-                if (Gdx.input.getY() > sound_sprite_button.getY() && Gdx.input.getY() < sound_sprite_button.getY() + sound_sprite_button.getHeight()) {
-                    if (soundcheck ){
-                        soundcheck = false;
-                        sound.pause();
-                        sound_sprite_button.setTexture(new Texture("mute.png"));
-                    }
-                    else {
-                        sound.play(0.12f);
-                        soundcheck = true;
-                        sound_sprite_button.setTexture(new Texture("sound_up.png"));
-                    }
-                    g.drawSprite(sound_sprite_button);
-                }
-            }
-        }
-
     }
 
-    public void renderEndscreen(Graphics g){
+    private void renderEndscreen(Graphics g){
 	    g.setBackgroundColor(Color.GRAY);
 	    renderBoard(g);
-	    sound.pause();
-	   //g.drawTexture(new Texture("Full Flour Alchemist (1).png"),width/2-250,height/2-250);
+	    music.pause();
+	    //music.dispose();
+	    //g.drawTexture(new Texture("Full Flour Alchemist (1).png"),width/2-250,height/2-250);
         if (System.nanoTime()/1000000000 - checkdelay > 5){
             g.drawTexture(new Texture("end bg.jpg"),0,0);
         }
     }
 
-    public void renderRestartstate (Graphics g){
+    private void renderRestartstate (Graphics g){
 	    g.drawSprite(restartState);
     }
 
-    public void renderClear (Graphics g){
+    private void renderClear (Graphics g){
 	    g.drawTexture(new Texture("complete_bg.jpg"),0,0);
 	    g.drawTexture(new Texture("complete_spare_new.png"),width/2-300,height/6);
+    }
+
+    public void playMusic(){
+        music.dispose();
+	   switch (game.getCurrentState()){
+           case MainMenu:
+               music = Gdx.audio.newSound(Gdx.files.internal("sound/song.mp3"));
+               break;
+           case Stage1:
+               music = Gdx.audio.newSound(Gdx.files.internal("sound/1.mp3"));
+               break;
+           case Stage2:
+               music = Gdx.audio.newSound(Gdx.files.internal("sound/2.mp3"));break;
+           case Stage3:
+               music = Gdx.audio.newSound(Gdx.files.internal("sound/3.mp3"));break;
+           case Stage4:
+               music = Gdx.audio.newSound(Gdx.files.internal("sound/4.mp3"));break;
+           case Stage5:
+               music = Gdx.audio.newSound(Gdx.files.internal("sound/5.mp3"));break;
+       }
+        music.play(soundOn ? volume:0);
     }
 }
