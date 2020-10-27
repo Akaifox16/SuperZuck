@@ -1,14 +1,18 @@
 package CPE200.proj.succ.model.board;
 
-import CPE200.proj.succ.Control;
+import CPE200.proj.succ.SuperZuckGame;
 import CPE200.proj.succ.model.GameObject;
-import CPE200.proj.succ.model.GameObjectFactory;
 import CPE200.proj.succ.model.GameObjectType;
 import CPE200.proj.succ.model.GameState;
 import CPE200.proj.succ.model.item.Flour;
+import CPE200.proj.succ.model.item.FlourConverter;
+import CPE200.proj.succ.model.item.Key;
 import CPE200.proj.succ.model.movable.Bomb;
+import CPE200.proj.succ.model.movable.Bribe;
 import CPE200.proj.succ.model.movable.ThumnaZ;
+import CPE200.proj.succ.model.staticObject.Door;
 import CPE200.proj.succ.model.staticObject.Police;
+import CPE200.proj.succ.model.staticObject.Wall;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
 
@@ -27,7 +31,6 @@ public class GameBoard {
     private List<Flour> flours;
     private Set<Bomb> bombs;
     private ThumnaZ thumnaz;
-    private GameObjectFactory factory;
 
     //setters
     public void setThumnaz(int x , int y){thumnaz.setCoordinate(x,y);}
@@ -51,19 +54,34 @@ public class GameBoard {
 
     //add object to board
     private void addToBoard(int i, int j , GameObjectType type){
-        GameObject obj = factory.create(i,j,type);
-        board[i][j] = obj;
         switch (type){
+            case Bribe: board[i][j] = new Bribe(i,j);break;
+            case Wall: board[i][j] = new Wall(i,j);break;
+            case NULL: board[i][j] = new GameObject(i,j);break;
+            case Key:board[i][j] = new Key(i,j);break;
+            case StageDoor:board[i][j] = Door.StageDoor(i,j);break;
+            case Door:board[i][j] = Door.door(i,j);break;
+            case Converter:board[i][j] = new FlourConverter(i,j);break;
             case Thumnaz:
-                thumnaz = (ThumnaZ) obj;
+                thumnaz = new ThumnaZ(i,j);
+                board[i][j] = thumnaz;
                 break;
             case Police:
-                polices.add((Police) obj);break;
+                Police p = new Police(i,j);
+                board[i][j] = p;
+                polices.add(p);break;
             case Flour:
+                Flour f = Flour.flour(i,j);
+                board[i][j] = f;
+                flours.add(f);break;
             case Coke:
-                flours.add((Flour)obj);break;
+                Flour c = Flour.coke(i,j);
+                board[i][j] = c;
+                flours.add(c);break;
             case Bomb:
-                bombs.add((Bomb)obj);break;
+                Bomb b = new Bomb(i,j,null);
+                board[i][j] = b;
+                bombs.add(b);break;
         }
 
     }
@@ -121,39 +139,49 @@ public class GameBoard {
         }
     }
 
-    private void checkBombAdjacent(Control game , Set<Bomb> btoom , Bomb bomb , GameObject obj){
-        if(bomb.check(obj)){
-            if(bomb.getDelay() == 0) {
+    private boolean checkBombAdjacent(SuperZuckGame game , Set<Bomb> btoom , Bomb bomb , GameObject obj) {
+        if(bomb.getDelay() == 0){
+            if(bomb.check(obj)){
                 switch (obj.getType()) {
                     case Thumnaz:
-                        game.toGameOver();
+                        game.toGameOver(bomb);
                         break;
                     case Police:
                         toNull(obj);
                         btoom.add(bomb);
-                        System.out.println(bomb.toString() + " added!");
+                        //System.out.println(bomb.toString() + " added!");
                         break;
                 }
+            }else{
+                btoom.add(bomb);
             }
+            return true;
+        }else{
+            return false;
         }
     }
-
-    public void checkBomb(Control game){
+    public void checkBomb(SuperZuckGame game,boolean soundOn){
         Set<Bomb> Btoom = new HashSet<Bomb>();
+        boolean haveLeft,haveRight,haveUp,haveDown;
         for (Bomb bomb:bombs) {
-            checkBombAdjacent(game,Btoom,bomb,leftObject(bomb));
-            checkBombAdjacent(game,Btoom,bomb,rightObject(bomb));
-            checkBombAdjacent(game,Btoom,bomb,upperObject(bomb));
-            checkBombAdjacent(game,Btoom,bomb,lowerObject(bomb));
+            haveLeft=haveRight=haveUp=haveDown=false;
+            if(bomb.isEnable()) {
+                haveLeft = checkBombAdjacent(game, Btoom, bomb, leftObject(bomb));
+                haveRight = checkBombAdjacent(game, Btoom, bomb, rightObject(bomb));
+                haveUp = checkBombAdjacent(game, Btoom, bomb, upperObject(bomb));
+                haveDown = checkBombAdjacent(game, Btoom, bomb, lowerObject(bomb));
+                if(!haveUp && !haveDown &&!haveLeft && !haveRight) bomb.countdown();
+            }
             System.out.println(bomb.toString());
         }
-        for(Bomb toNull:Btoom){
-            toNull(toNull);
+        for(Bomb del:Btoom){
+            del.play(soundOn);
+            toNull(del);
         }
         bombs.removeAll(Btoom);
     }
 
-    public void checkPolice(Control game) {
+    public void checkPolice(SuperZuckGame game , boolean soundOn) {
         for (Police police:polices) {
 
             GameObject left = leftObject(police);
@@ -169,24 +197,24 @@ public class GameBoard {
                             lower.getType()== GameObjectType.Bribe){
                         if(left.getType() == GameObjectType.Bribe){
                             toNull(left);
-                            police.bribed();break;
+                            police.bribed(soundOn);break;
                         }else if(right.getType() == GameObjectType.Bribe){
                             toNull(right);
-                            police.bribed();break;
+                            police.bribed(soundOn);break;
                         }else if(upper.getType() == GameObjectType.Bribe){
                             toNull(upper);
-                            police.bribed();break;
+                            police.bribed(soundOn);break;
                         }else{
                             toNull(lower);
-                            police.bribed();break;
+                            police.bribed(soundOn);break;
                         }
                     }else if(left.getType() == GameObjectType.Thumnaz ||
                             right.getType()== GameObjectType.Thumnaz ||
                             upper.getType()== GameObjectType.Thumnaz ||
                             lower.getType()== GameObjectType.Thumnaz){
                         toNull(thumnaz);
-                        police.caught();
-                        game.toGameOver();
+                        police.caught(soundOn);
+                        game.toGameOver(police);
                         break;
                     }
                 case Sleep:
@@ -197,7 +225,7 @@ public class GameBoard {
                         right.getType() == GameObjectType.Thumnaz ||
                         upper.getType() == GameObjectType.Thumnaz ||
                         lower.getType() == GameObjectType.Thumnaz){
-                            police.suspect();
+                            police.suspect(soundOn);
                         }
                     }break;
             }
@@ -232,7 +260,6 @@ public class GameBoard {
         }
         this.ROW = i;
         this.COLUMN = j;
-        this.factory = new GameObjectFactory();
         this.inventory = new ArrayList<GameObject>();
         this.flours = new ArrayList<Flour>();
         this.polices = new ArrayList<Police>();
@@ -242,7 +269,7 @@ public class GameBoard {
     public GameBoard newBoard(GameState state){
         GameBoard newBoard =  new GameBoard(12,18);
         switch (state){
-            case Stage1: newBoard.jsonReader("Map/Stage1.json");;break;
+            case Stage1: newBoard.jsonReader("Map/Stage3.json");;break;
             case Stage2: newBoard.jsonReader("Map/Stage2.json");;break;
             case Stage3: newBoard.jsonReader("Map/Stage3.json");;break;
             case Stage4: newBoard.jsonReader("Map/Stage4.json");;break;
@@ -250,7 +277,6 @@ public class GameBoard {
         }
         return newBoard;
     }
-
     private void jsonReader(String stage){
         Json json = new Json();
         ArrayList<String> strings = json.fromJson(ArrayList.class ,String.class, Gdx.files.internal(stage).readString());
